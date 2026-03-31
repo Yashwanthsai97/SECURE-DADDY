@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Main_page</title>
+    <title>Secure Daddy</title>
     <link rel="stylesheet" href="../static/main_page.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 </head>
@@ -22,7 +22,18 @@
                 
             </nav>
             {% if current_user %}
-            <a class="btn-signing" href="{{ url_for('signin_page') }}">{{ current_user.name }}</a>
+            <a class="btn-signing profile-chip" href="{{ url_for('signin_page') }}">
+                <span class="profile-chip-avatar">
+                    {% if current_user.profile_picture %}
+                    <img src="{{ current_user.profile_picture }}" alt="{{ current_user.name }}">
+                    {% else %}
+                    <span class="profile-chip-initials">{{ current_user.initials }}</span>
+                    {% endif %}
+                </span>
+                <span class="profile-chip-text">
+                    <strong>{{ current_user.name }}</strong>
+                </span>
+            </a>
             {% else %}
             <a class="btn-signing" href="{{ url_for('signin_page') }}">SIGN IN</a>
             {% endif %}
