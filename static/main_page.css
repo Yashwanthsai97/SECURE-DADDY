@@ -95,6 +95,9 @@ nav a:hover
 }
 .btn-signing
 {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     background-color: #a7a7a7;
     color: black;
     padding: 0.8rem 2rem;
@@ -104,6 +107,7 @@ nav a:hover
     font-weight: 500;
     transition: background-color 0.2s ease;
     cursor: pointer;
+    text-decoration: none;
 }
 .btn-signing:hover
 {
@@ -149,6 +153,9 @@ main{
 }
 
 .btn{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     padding:12px 25px;
     border-radius:30px;
     border:none;
@@ -156,6 +163,7 @@ main{
     font-weight:500;
     margin-right:15px;
     transition:0.3s;
+    text-decoration: none;
 }
 
 .primary{

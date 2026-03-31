@@ -15,20 +15,24 @@
             </div>
 
             <nav>
-                <a href="#">Home</a>
-                <a href="#">Tools</a>
+                <a href="{{ url_for('home') }}">Home</a>
+                <a href="{{ url_for('osint_page') }}">Tools</a>
                 <a href="#">Why us?</a>
                 <a href="#">Contact</a>
                 
             </nav>
-            <button class="btn-signing">SIGNIN</button>
+            {% if current_user %}
+            <a class="btn-signing" href="{{ url_for('signin_page') }}">{{ current_user.name }}</a>
+            {% else %}
+            <a class="btn-signing" href="{{ url_for('signin_page') }}">SIGN IN</a>
+            {% endif %}
         </header>
         <!-- content Section -->
             <div class="hero">
                     <div class="hero-text">
                         <h1>Secure Smarter<br>Detect Faster</h1>
                         <p>Powerful cybersecurity tools built for modern defenders.<br>Protect systems, analyze threats, and stay ahead of attackers.</p>
-                        <button class="btn primary">Get Started</button>
+                        <a class="btn primary" href="{{ url_for('signin_page') }}">Get Started</a>
                         <button class="btn secondary">Documentation</button>
                     </div>
                 <!-- video section -->

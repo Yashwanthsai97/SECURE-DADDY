@@ -1,15 +1,45 @@
 import io
+import json
+from pathlib import Path
+
 import requests
-from flask import Flask, request, jsonify, render_template, send_file
+from flask import Flask, request, jsonify, render_template, send_file, session
 from flask_cors import CORS
 import whois
 from datetime import datetime, timezone
 from PyPDF2 import PdfReader, PdfWriter
+from werkzeug.security import check_password_hash, generate_password_hash
 from metadata_utils import analyze_uploaded_file
 
 
 app = Flask(__name__)
 CORS(app)
+app.secret_key = "secure-daddy-dev-secret"
+
+BASE_DIR = Path(__file__).resolve().parent
+USER_DB_PATH = BASE_DIR / "users.json"
+
+
+def load_users():
+    if not USER_DB_PATH.exists():
+        return {}
+
+    try:
+        return json.loads(USER_DB_PATH.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return {}
+
+
+def save_users(users):
+    USER_DB_PATH.write_text(json.dumps(users, indent=2), encoding="utf-8")
+
+
+def current_user():
+    user_email = session.get("user_email")
+    if not user_email:
+        return None
+
+    return load_users().get(user_email)
 
 def normalize_date(date_value):
     if isinstance(date_value, list):
@@ -44,7 +74,60 @@ def ip_lookup():
     
 @app.route("/")
 def home():
-    return render_template("main_page.html")
+    return render_template("main_page.html", current_user=current_user())
+
+
+@app.route("/signin")
+def signin_page():
+    return render_template("signin.html", current_user=current_user())
+
+
+@app.route("/api/auth/signup", methods=["POST"])
+def signup():
+    payload = request.get_json(silent=True) or {}
+    name = (payload.get("name") or "").strip()
+    email = (payload.get("email") or "").strip().lower()
+    password = payload.get("password") or ""
+
+    if not name or not email or not password:
+        return jsonify({"error": "Name, email, and password are required."}), 400
+
+    users = load_users()
+    if email in users:
+        return jsonify({"error": "An account already exists for this email."}), 409
+
+    users[email] = {
+        "name": name,
+        "email": email,
+        "password_hash": generate_password_hash(password),
+    }
+    save_users(users)
+
+    session["user_email"] = email
+    return jsonify({"message": "Account created successfully.", "redirect": "/"})
+
+
+@app.route("/api/auth/login", methods=["POST"])
+def login():
+    payload = request.get_json(silent=True) or {}
+    email = (payload.get("email") or "").strip().lower()
+    password = payload.get("password") or ""
+
+    if not email or not password:
+        return jsonify({"error": "Email and password are required."}), 400
+
+    user = load_users().get(email)
+    if not user or not check_password_hash(user["password_hash"], password):
+        return jsonify({"error": "Invalid email or password."}), 401
+
+    session["user_email"] = email
+    return jsonify({"message": "Signed in successfully.", "redirect": "/"})
+
+
+@app.route("/api/auth/logout", methods=["POST"])
+def logout():
+    session.pop("user_email", None)
+    return jsonify({"message": "Signed out successfully.", "redirect": "/"})
 
 @app.route("/osint")
 def osint_page():
