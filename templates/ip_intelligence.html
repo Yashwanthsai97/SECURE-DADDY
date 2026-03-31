@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Investigate IP address geography and network ownership details with SecureDaddy IP Intelligence.">
+    <title>SecureDaddy | IP Intelligence</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@400;600;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='tool_interface.css') }}">
+</head>
+<body>
+    <header class="site-header">
+        <div class="brand-block">
+            <div class="brand-mark">SD</div>
+            <div class="brand-copy">
+                <p class="eyebrow">OSINT Workspace</p>
+                <h1 class="brand-title">SecureDaddy</h1>
+                <p class="brand-subtitle">IP intelligence and network attribution</p>
+            </div>
+        </div>
+        <nav class="main-nav" aria-label="Primary">
+            <a href="/">Home</a>
+            <a href="/osint" class="active">OSINT Tools</a>
+            <a href="/pdftool">PDF Tool</a>
+            <a href="/metadata">Metadata</a>
+            <button class="theme-toggle" id="themeToggle" type="button" aria-pressed="false" aria-label="Switch theme">
+                <span class="theme-toggle-track" aria-hidden="true">
+                    <span class="theme-toggle-icon theme-toggle-icon-moon"></span>
+                    <span class="theme-toggle-icon theme-toggle-icon-sun"></span>
+                    <span class="theme-toggle-thumb"></span>
+                </span>
+                <span class="theme-toggle-text" id="themeToggleText">Dark</span>
+            </button>
+        </nav>
+    </header>
+
+    <main class="page-shell">
+        <section class="hero-grid">
+            <div class="hero-copy-block">
+                <span class="section-tag">Live Network Recon</span>
+                <h1>Profile an IP in seconds.</h1>
+                <p class="lead">
+                    Query a public IP to review geolocation, provider, ASN, and network ownership details in one interface.
+                    The lookup experience now follows the same polished SecureDaddy tool system used by the PDF tool.
+                </p>
+                <div class="hero-pills">
+                    <span>Geography context</span>
+                    <span>ISP and ASN data</span>
+                    <span>Fast browser workflow</span>
+                </div>
+            </div>
+            <div class="metric-card">
+                <strong>IP OSINT</strong>
+                <span>
+                    Use this for quick attribution checks, triage on suspicious traffic, or validating infrastructure ownership
+                    during an investigation.
+                </span>
+                <div class="stats-row">
+                    <span class="badge">Country and region</span>
+                    <span class="badge">Coordinates</span>
+                    <span class="badge">Network provider</span>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-heading">
+            <h2>Lookup Console</h2>
+            <p>Enter a public IPv4 or IPv6 address and SecureDaddy will request the enrichment data from the backend API.</p>
+        </div>
+
+        <section class="content-grid">
+            <div class="panel">
+                <h2>IP Query</h2>
+                <p class="panel-copy">Private or invalid addresses are rejected so the results stay useful for real reconnaissance work.</p>
+                <div class="form-stack">
+                    <div class="field-group">
+                        <label class="field-label" for="ipInput">Target IP address</label>
+                        <input class="text-input" type="text" id="ipInput" placeholder="8.8.8.8" autocomplete="off">
+                    </div>
+                    <div class="actions-row">
+                        <button class="primary-btn" type="button" id="lookupButton">Run Lookup</button>
+                        <a class="secondary-btn" href="/osint">Back to OSINT Hub</a>
+                    </div>
+                    <div class="status-message info-message" id="lookupStatus" aria-live="polite">
+                        Waiting for an IP address. Results will appear in the analysis panel.
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel result-panel">
+                <h2>Analysis Output</h2>
+                <p class="panel-copy">The result is grouped into location and network sections for faster scanning.</p>
+                <div class="data-grid" id="resultGrid" hidden>
+                    <section class="data-card">
+                        <h3>Location Information</h3>
+                        <dl class="data-list" id="locationList"></dl>
+                    </section>
+                    <section class="data-card">
+                        <h3>Network Information</h3>
+                        <dl class="data-list" id="networkList"></dl>
+                    </section>
+                </div>
+                <p class="muted-note" id="emptyState">
+                    No IP intelligence yet. Run a lookup to populate this panel with country, region, city, coordinates,
+                    provider, and ASN details.
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <p>SecureDaddy OSINT tools now share one visual system for a cleaner investigative workflow.</p>
+        <p><a href="/osint">Return to tool directory</a></p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='tool_interface.js') }}"></script>
+    <script>
+        const ipInput = document.getElementById("ipInput");
+        const lookupButton = document.getElementById("lookupButton");
+        const lookupStatus = document.getElementById("lookupStatus");
+        const resultGrid = document.getElementById("resultGrid");
+        const locationList = document.getElementById("locationList");
+        const networkList = document.getElementById("networkList");
+        const emptyState = document.getElementById("emptyState");
+
+        function escapeHtml(value) {
+            return String(value)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#39;");
+        }
+
+        function setStatus(message, type) {
+            lookupStatus.textContent = message;
+            lookupStatus.className = "status-message " + type + "-message";
+        }
+
+        function renderRows(target, rows) {
+            target.innerHTML = rows.map(row => {
+                return "<div class=\"data-row\"><dt>" + escapeHtml(row.label) + "</dt><dd>" + escapeHtml(row.value) + "</dd></div>";
+            }).join("");
+        }
+
+        async function lookup() {
+            const ip = ipInput.value.trim();
+
+            if (!ip) {
+                setStatus("Enter an IP address before running the lookup.", "error");
+                resultGrid.hidden = true;
+                emptyState.hidden = false;
+                return;
+            }
+
+            lookupButton.disabled = true;
+            setStatus("Querying the IP intelligence service...", "info");
+
+            try {
+                const response = await fetch("/api/ip?ip=" + encodeURIComponent(ip));
+                const data = await response.json();
+
+                if (!response.ok || !data || data.error || data.status === "fail") {
+                    setStatus("Invalid or private IP address. Try a public IP for enrichment.", "error");
+                    resultGrid.hidden = true;
+                    emptyState.hidden = false;
+                    return;
+                }
+
+                renderRows(locationList, [
+                    { label: "IP Address", value: data.query || ip },
+                    { label: "Country", value: data.country || "N/A" },
+                    { label: "Region", value: data.regionName || "N/A" },
+                    { label: "City", value: data.city || "N/A" },
+                    { label: "ZIP", value: data.zip || "N/A" },
+                    { label: "Timezone", value: data.timezone || "N/A" },
+                    { label: "Latitude", value: data.lat || "N/A" },
+                    { label: "Longitude", value: data.lon || "N/A" }
+                ]);
+
+                renderRows(networkList, [
+                    { label: "ISP", value: data.isp || "N/A" },
+                    { label: "Organization", value: data.org || "N/A" },
+                    { label: "ASN", value: data.as || "N/A" }
+                ]);
+
+                resultGrid.hidden = false;
+                emptyState.hidden = true;
+                setStatus("IP intelligence loaded successfully.", "success");
+            } catch (error) {
+                console.error("IP lookup failed:", error);
+                setStatus("The lookup failed. Check the backend service and try again.", "error");
+                resultGrid.hidden = true;
+                emptyState.hidden = false;
+            } finally {
+                lookupButton.disabled = false;
+            }
+        }
+
+        lookupButton.addEventListener("click", lookup);
+        ipInput.addEventListener("keydown", event => {
+            if (event.key === "Enter") {
+                lookup();
+            }
+        });
+    </script>
+</body>
+</html>

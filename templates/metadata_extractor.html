@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Inspect descriptive, structural, administrative, website, cybersecurity, and media metadata locally with the SecureDaddy metadata viewer interface.">
+    <title>SecureDaddy | Metadata Extractor</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@400;600;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='tool_interface.css') }}">
+</head>
+<body>
+    <header class="site-header">
+        <div class="brand-block">
+            <div class="brand-mark">SD</div>
+            <div class="brand-copy">
+                <p class="eyebrow">File Intelligence</p>
+                <h1 class="brand-title">SecureDaddy</h1>
+                <p class="brand-subtitle">Client-side file, website, cybersecurity, image, and video metadata analysis</p>
+            </div>
+        </div>
+        <nav class="main-nav" aria-label="Primary">
+            <a href="/">Home</a>
+            <a href="/osint">OSINT Tools</a>
+            <a href="/pdftool">PDF Tool</a>
+            <a href="/metadata" class="active">Metadata</a>
+            <button class="theme-toggle" id="themeToggle" type="button" aria-pressed="false" aria-label="Switch theme">
+                <span class="theme-toggle-track" aria-hidden="true">
+                    <span class="theme-toggle-icon theme-toggle-icon-moon"></span>
+                    <span class="theme-toggle-icon theme-toggle-icon-sun"></span>
+                    <span class="theme-toggle-thumb"></span>
+                </span>
+                <span class="theme-toggle-text" id="themeToggleText">Dark</span>
+            </button>
+        </nav>
+    </header>
+
+    <main class="page-shell">
+        <section class="hero-grid">
+            <div class="hero-copy-block">
+                <span class="section-tag">Local Metadata Review</span>
+                <h1>Inspect metadata across multiple categories without leaving the browser.</h1>
+                <p class="lead">
+                    Upload a file to inspect descriptive, structural, administrative, file-system, website, cybersecurity,
+                    and EXIF-style metadata where available, then export the report as a PDF.
+                </p>
+                <div class="hero-pills">
+                    <span>Category-based report</span>
+                    <span>Image and video preview</span>
+                    <span>PDF report export</span>
+                </div>
+            </div>
+            <div class="metric-card">
+                <strong>Client-Side Safe</strong>
+                <span>
+                    The file is processed in the browser so analysts can quickly inspect metadata without shipping the media
+                    to an external service.
+                </span>
+                <div class="stats-row">
+                    <span class="badge">Descriptive fields</span>
+                    <span class="badge">Structural fields</span>
+                    <span class="badge">Technical fields</span>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-heading">
+            <h2>Metadata Console</h2>
+            <p>Choose a supported file to preview it where possible, review extracted information, and download the formatted metadata report.</p>
+        </div>
+
+        <section class="content-grid">
+            <div class="panel">
+                <h2>Upload File</h2>
+                <p class="panel-copy">Images and videos expose technical metadata. Text-based files can still be profiled through file-system and content-derived metadata categories.</p>
+                <div class="form-stack">
+                    <div class="field-group">
+                        <label class="field-label" for="fileInput">Supported file</label>
+                        <input class="file-input" type="file" id="fileInput" accept="image/*,video/*,text/*,.html,.htm,.csv,.json,.xml,.sql,.log,.eml,.txt,.pdf">
+                    </div>
+                    <div class="actions-row">
+                        <button class="primary-btn" type="button" id="downloadBtn" disabled>Download Report</button>
+                        <a class="secondary-btn" href="/osint">Back to OSINT Hub</a>
+                    </div>
+                    <div class="status-message info-message" id="metadataStatus" aria-live="polite">
+                        Waiting for a file. The metadata report will update after you choose supported content.
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel preview-panel">
+                <h2>Media Preview</h2>
+                <p class="panel-copy">A preview helps confirm you selected the expected evidence file before reviewing the metadata output.</p>
+                <div class="preview-image-wrap">
+                    <img id="previewImage" alt="Selected image preview" hidden>
+                    <video id="previewVideo" controls playsinline hidden></video>
+                    <p class="muted-note" id="previewEmpty">No preview available yet.</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-heading">
+            <h2>Extracted Report</h2>
+            <p>The output keeps an investigator-friendly fixed-width report style while adopting the new visual theme.</p>
+        </div>
+
+        <section class="panel">
+            <pre class="text-output" id="output">No metadata extracted yet.</pre>
+            <p class="muted-note" id="warning"></p>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <p>Metadata review, IP enrichment, and WHOIS now sit inside one cohesive SecureDaddy UI system.</p>
+        <p><a href="/pdftool">Open PDF tool</a></p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='tool_interface.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/exif-js"></script>
+    <script>
+        const fileInput = document.getElementById("fileInput");
+        const output = document.getElementById("output");
+        const warning = document.getElementById("warning");
+        const previewImage = document.getElementById("previewImage");
+        const previewVideo = document.getElementById("previewVideo");
+        const previewEmpty = document.getElementById("previewEmpty");
+        const downloadBtn = document.getElementById("downloadBtn");
+        const metadataStatus = document.getElementById("metadataStatus");
+
+        let reportLines = [];
+        let currentReportName = "metadata-report.pdf";
+
+        function setStatus(message, type) {
+            metadataStatus.textContent = message;
+            metadataStatus.className = "status-message " + type + "-message";
+        }
+
+        function add(label, value) {
+            reportLines.push(format(label, value ?? "-"));
+        }
+
+        function format(key, value) {
+            return String(key).padEnd(32) + " : " + value;
+        }
+
+        function formatGps(gpsArray) {
+            if (!gpsArray || !Array.isArray(gpsArray)) {
+                return "-";
+            }
+
+            return gpsArray.map(value => Number(value).toFixed(4)).join(", ");
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes < 1024) {
+                return bytes + " B";
+            }
+
+            if (bytes < 1024 * 1024) {
+                return (bytes / 1024).toFixed(1) + " kB";
+            }
+
+            if (bytes < 1024 * 1024 * 1024) {
+                return (bytes / (1024 * 1024)).toFixed(2) + " MB";
+            }
+
+            return (bytes / (1024 * 1024 * 1024)).toFixed(2) + " GB";
+        }
+
+        function buildReportName(filename) {
+            const dotIndex = filename.lastIndexOf(".");
+            const base = dotIndex > -1 ? filename.slice(0, dotIndex) : filename;
+            return base + "-metadata-report.pdf";
+        }
+
+        function getFileExtension(filename) {
+            const dotIndex = filename.lastIndexOf(".");
+            return dotIndex > -1 ? filename.slice(dotIndex + 1).toLowerCase() : "";
+        }
+
+        function formatDateTime(value) {
+            if (!value) {
+                return "-";
+            }
+
+            try {
+                return new Date(value).toLocaleString();
+            } catch (error) {
+                return String(value);
+            }
+        }
+
+        function uniqueValues(values) {
+            return Array.from(new Set((values || []).filter(Boolean)));
+        }
+
+        function addSection(title) {
+            if (reportLines.length) {
+                reportLines.push("");
+            }
+
+            reportLines.push("[" + title + "]");
+        }
+
+        function addCategoryFields(sectionTitle, fields) {
+            addSection(sectionTitle);
+            Object.entries(fields).forEach(entry => {
+                add(entry[0], entry[1] ?? "-");
+            });
+        }
+
+        function addRequestedMetadataSections(file, extra) {
+            const extension = getFileExtension(file.name);
+            const fileType = file.type || "Unknown";
+            const descriptive = (extra && extra.descriptive) || {};
+            const structural = (extra && extra.structural) || {};
+            const administrative = (extra && extra.administrative) || {};
+            const technical = (extra && extra.technical) || {};
+            const rights = (extra && extra.rights) || {};
+            const website = (extra && extra.website) || {};
+            const database = (extra && extra.database) || {};
+            const cybersecurity = (extra && extra.cybersecurity) || {};
+            const exif = (extra && extra.exif) || {};
+
+            addCategoryFields("1. Descriptive Metadata", {
+                "Title": descriptive.title || file.name,
+                "Author": descriptive.author || "-",
+                "Keywords": descriptive.keywords || "-",
+                "Tags": descriptive.tags || "-",
+                "Description": descriptive.description || "-",
+                "Subject": descriptive.subject || (extension ? extension.toUpperCase() + " file" : "File")
+            });
+
+            addCategoryFields("2. Structural Metadata", {
+                "Page order": structural.pageOrder || "-",
+                "Chapters/sections": structural.chapters || "-",
+                "Table relationships": structural.tableRelationships || "-",
+                "File structure": structural.fileStructure || "-",
+                "Data organization": structural.dataOrganization || "-"
+            });
+
+            addCategoryFields("3. Administrative Metadata", {
+                "File size": administrative.fileSize || formatFileSize(file.size),
+                "File type/format": administrative.fileType || fileType,
+                "Creation date": administrative.creationDate || "-",
+                "Modification date": administrative.modificationDate || formatDateTime(file.lastModified),
+                "Owner": administrative.owner || "-",
+                "Access permissions": administrative.accessPermissions || "Browser file access only"
+            });
+
+            addCategoryFields("Administrative Metadata - Technical", {
+                "Resolution": technical.resolution || "-",
+                "Format": technical.format || fileType
+            });
+
+            addCategoryFields("Administrative Metadata - Rights", {
+                "Copyright": rights.copyright || "-",
+                "License": rights.license || "-"
+            });
+
+            addCategoryFields("File Systems", {
+                "File name": file.name,
+                "Size": formatFileSize(file.size),
+                "Type": fileType,
+                "Date created/modified": formatDateTime(file.lastModified)
+            });
+
+            addCategoryFields("Databases", {
+                "Table name": database.tableName || "-",
+                "Column names": database.columnNames || "-",
+                "Data types": database.dataTypes || "-",
+                "Constraints": database.constraints || "-"
+            });
+
+            addCategoryFields("Websites (SEO)", {
+                "Meta title": website.metaTitle || "-",
+                "Meta description": website.metaDescription || "-",
+                "Keywords": website.keywords || descriptive.keywords || "-"
+            });
+
+            addCategoryFields("Cybersecurity", {
+                "Logs": cybersecurity.logs || "-",
+                "IP address": cybersecurity.ipAddress || "-",
+                "Timestamp": cybersecurity.timestamp || "-",
+                "Email headers": cybersecurity.emailHeaders || "-"
+            });
+
+            addCategoryFields("Images (EXIF)", {
+                "Camera model": exif.cameraModel || "-",
+                "ISO": exif.iso || "-",
+                "Location": exif.location || "-",
+                "Date/time": exif.dateTime || "-"
+            });
+        }
+
+        function appendBackendSections(payload) {
+            if (!payload || !payload.sections) {
+                return;
+            }
+
+            Object.entries(payload.sections).forEach(entry => {
+                addCategoryFields("Backend " + entry[0], entry[1]);
+            });
+
+            if (payload.warnings && payload.warnings.length) {
+                warning.textContent = payload.warnings.join(" ");
+            }
+        }
+
+        async function fetchBackendMetadata(file) {
+            const formData = new FormData();
+            formData.append("file", file);
+
+            const response = await fetch("/api/metadata/analyze", {
+                method: "POST",
+                body: formData
+            });
+
+            if (!response.ok) {
+                let errorMessage = "Backend metadata analysis failed.";
+
+                try {
+                    const data = await response.json();
+                    if (data && data.error) {
+                        errorMessage = data.error;
+                    }
+                } catch (error) {
+                    // Keep the fallback message.
+                }
+
+                throw new Error(errorMessage);
+            }
+
+            return response.json();
+        }
+
+        function resetPreview() {
+            previewImage.hidden = true;
+            previewImage.removeAttribute("src");
+            previewVideo.hidden = true;
+            previewVideo.pause();
+            previewVideo.removeAttribute("src");
+            previewVideo.load();
+            previewEmpty.hidden = false;
+        }
+
+        function finalizeReport(successMessage) {
+            output.textContent = reportLines.join("\n");
+            downloadBtn.disabled = reportLines.length === 0;
+            setStatus(successMessage, "success");
+        }
+
+        function parseHtmlMetadata(text) {
+            const parser = new DOMParser();
+            const documentNode = parser.parseFromString(text, "text/html");
+            const title = documentNode.querySelector("title");
+            const description = documentNode.querySelector('meta[name="description"]');
+            const keywords = documentNode.querySelector('meta[name="keywords"]');
+
+            return {
+                metaTitle: title ? title.textContent.trim() : "-",
+                metaDescription: description ? description.getAttribute("content") : "-",
+                keywords: keywords ? keywords.getAttribute("content") : "-"
+            };
+        }
+
+        function parseSqlMetadata(text) {
+            const tableMatch = text.match(/create\s+table\s+([^\s(]+)/i);
+            const columnMatches = Array.from(text.matchAll(/^\s*([A-Za-z_][A-Za-z0-9_]*)\s+([A-Za-z0-9()_,\s]+)/gm));
+            const constraintMatches = Array.from(text.matchAll(/\b(primary key|foreign key|unique|not null|check|default)\b/gi)).map(match => match[0].toUpperCase());
+
+            return {
+                tableName: tableMatch ? tableMatch[1] : "-",
+                columnNames: uniqueValues(columnMatches.map(match => match[1])).join(", "),
+                dataTypes: uniqueValues(columnMatches.map(match => match[2].trim().split(/\s+/)[0])).join(", "),
+                constraints: uniqueValues(constraintMatches).join(", ")
+            };
+        }
+
+        function extractCyberIndicators(text) {
+            const ipMatches = uniqueValues(text.match(/\b(?:\d{1,3}\.){3}\d{1,3}\b/g) || []);
+            const timestampMatches = uniqueValues(text.match(/\b\d{4}-\d{2}-\d{2}[ T]\d{2}:\d{2}:\d{2}(?:Z|[+-]\d{2}:\d{2})?\b/g) || []);
+            const emailHeaderMatches = Array.from(text.matchAll(/^(From|To|Cc|Bcc|Subject|Date|Message-ID|Return-Path|Received):\s*(.+)$/gim))
+                .map(match => match[1] + ": " + match[2].trim());
+
+            return {
+                ipAddress: ipMatches.join(", "),
+                timestamp: timestampMatches.join(", "),
+                emailHeaders: emailHeaderMatches.join(" | "),
+                logs: timestampMatches.length || ipMatches.length ? "Indicators detected in text content" : "-"
+            };
+        }
+
+        function isStructuredTextFile(file) {
+            const extension = getFileExtension(file.name);
+            const textLikeExtensions = ["html", "htm", "txt", "log", "eml", "csv", "json", "xml", "sql"];
+
+            return file.type.startsWith("text/")
+                || file.type === "application/json"
+                || file.type === "application/xml"
+                || file.type === "message/rfc822"
+                || textLikeExtensions.includes(extension);
+        }
+
+        async function readStructuredTextMetadata(file) {
+            const extension = getFileExtension(file.name);
+            const text = await file.text();
+            const htmlMetadata = extension === "html" || extension === "htm" ? parseHtmlMetadata(text) : {};
+            const sqlMetadata = extension === "sql" ? parseSqlMetadata(text) : {};
+            const firstLine = text.split(/\r?\n/).find(Boolean) || "";
+            const csvColumns = extension === "csv"
+                ? firstLine.split(",").map(value => value.trim()).filter(Boolean).join(", ")
+                : "-";
+
+            addSection("Basic File Information");
+            add("Media Kind", "Structured File");
+            add("File Name", file.name);
+            add("File Type", file.type || "Unknown");
+            add("File Size", formatFileSize(file.size));
+            add("Text Length", text.length + " characters");
+
+            addRequestedMetadataSections(file, {
+                descriptive: {
+                    title: htmlMetadata.metaTitle || file.name,
+                    keywords: htmlMetadata.keywords,
+                    tags: htmlMetadata.keywords,
+                    description: htmlMetadata.metaDescription,
+                    subject: extension ? extension.toUpperCase() + " file" : "File"
+                },
+                structural: {
+                    fileStructure: extension === "csv" ? "CSV tabular file" : extension === "sql" ? "SQL schema definition" : "Structured text file",
+                    dataOrganization: extension === "csv" ? "Header row and records" : extension === "sql" ? "Table and column declarations" : "Line-based text content",
+                    tableRelationships: extension === "csv" ? "Flat table structure" : "-"
+                },
+                administrative: {
+                    fileSize: formatFileSize(file.size),
+                    fileType: file.type || "Unknown",
+                    modificationDate: formatDateTime(file.lastModified)
+                },
+                technical: {
+                    format: file.type || getFileExtension(file.name)
+                },
+                database: {
+                    tableName: sqlMetadata.tableName,
+                    columnNames: sqlMetadata.columnNames || csvColumns,
+                    dataTypes: sqlMetadata.dataTypes,
+                    constraints: sqlMetadata.constraints
+                },
+                website: htmlMetadata,
+                cybersecurity: extractCyberIndicators(text)
+            });
+
+            addSection("Raw Text Preview");
+            add("First 500 characters", text.slice(0, 500));
+            previewEmpty.textContent = "No visual preview for this file type. Report generated from file content.";
+        }
+
+        function readImageMetadata(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                const img = new Image();
+
+                reader.onload = event => {
+                    const source = event.target.result;
+
+                    previewImage.src = source;
+                    previewImage.hidden = false;
+                    previewEmpty.hidden = true;
+                    img.src = source;
+                };
+
+                img.onload = () => {
+                    addSection("Basic File Information");
+                    add("Media Kind", "Image");
+                    add("File Name", file.name);
+                    add("File Type", file.type || "Unknown");
+                    add("File Size", formatFileSize(file.size));
+                    add("Image Width", img.width);
+                    add("Image Height", img.height);
+                    add("Megapixels", ((img.width * img.height) / 1000000).toFixed(2));
+
+                    EXIF.getData(img, function () {
+                        const tags = EXIF.getAllTags(this);
+
+                        addRequestedMetadataSections(file, {
+                            descriptive: {
+                                title: tags.XPTitle || tags.DocumentName || tags.ImageDescription,
+                                author: tags.Artist || tags.Author,
+                                keywords: tags.XPKeywords || tags.Keywords,
+                                tags: tags.XPKeywords || tags.Keywords,
+                                description: tags.ImageDescription || tags.XPComment,
+                                subject: tags.XPSubject || tags.Subject || "Image"
+                            },
+                            structural: {
+                                fileStructure: "Raster image file",
+                                dataOrganization: img.width + " x " + img.height + " pixels"
+                            },
+                            administrative: {
+                                fileSize: formatFileSize(file.size),
+                                fileType: file.type || "Unknown",
+                                modificationDate: formatDateTime(file.lastModified)
+                            },
+                            technical: {
+                                resolution: img.width + " x " + img.height,
+                                format: file.type || getFileExtension(file.name)
+                            },
+                            rights: {
+                                copyright: tags.Copyright,
+                                license: tags.License
+                            },
+                            cybersecurity: {
+                                timestamp: tags.DateTimeOriginal || tags.DateTime
+                            },
+                            exif: {
+                                cameraModel: tags.Model,
+                                iso: tags.ISOSpeedRatings || tags.ISO,
+                                location: tags.GPSLatitude && tags.GPSLongitude
+                                    ? formatGps(tags.GPSLatitude) + " | " + formatGps(tags.GPSLongitude)
+                                    : "-",
+                                dateTime: tags.DateTimeOriginal || tags.DateTime
+                            }
+                        });
+
+                        if (Object.keys(tags).length === 0) {
+                            warning.textContent = "No EXIF metadata found. This is common for screenshots, PNGs, web exports, or stripped files.";
+                        } else {
+                            add("Camera Make", tags.Make);
+                            add("Camera Model Name", tags.Model);
+                            add("Software", tags.Software);
+                            add("Date/Time Original", tags.DateTimeOriginal);
+                            add("Orientation", tags.Orientation);
+                            add("GPS Latitude", formatGps(tags.GPSLatitude));
+                            add("GPS Longitude", formatGps(tags.GPSLongitude));
+                        }
+
+                        resolve();
+                    });
+                };
+
+                img.onerror = () => {
+                    reject(new Error("The selected file could not be processed as an image."));
+                };
+
+                reader.onerror = () => {
+                    reject(new Error("The selected image could not be read."));
+                };
+
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function readVideoMetadata(file) {
+            return new Promise((resolve, reject) => {
+                const objectUrl = URL.createObjectURL(file);
+
+                previewVideo.src = objectUrl;
+                previewVideo.hidden = false;
+                previewEmpty.hidden = true;
+
+                previewVideo.onloadedmetadata = () => {
+                    addSection("Basic File Information");
+                    add("Media Kind", "Video");
+                    add("File Name", file.name);
+                    add("File Type", file.type || "Unknown");
+                    add("File Size", formatFileSize(file.size));
+                    add("Duration", previewVideo.duration ? previewVideo.duration.toFixed(2) + " seconds" : "Unknown");
+                    add("Video Width", previewVideo.videoWidth || "Unknown");
+                    add("Video Height", previewVideo.videoHeight || "Unknown");
+                    add("Aspect Ratio", previewVideo.videoWidth && previewVideo.videoHeight
+                        ? previewVideo.videoWidth + ":" + previewVideo.videoHeight
+                        : "Unknown");
+
+                    addRequestedMetadataSections(file, {
+                        descriptive: {
+                            title: file.name,
+                            description: "Video file",
+                            subject: "Video"
+                        },
+                        structural: {
+                            fileStructure: "Container video file",
+                            dataOrganization: "Time-based audio/video streams"
+                        },
+                        administrative: {
+                            fileSize: formatFileSize(file.size),
+                            fileType: file.type || "Unknown",
+                            modificationDate: formatDateTime(file.lastModified)
+                        },
+                        technical: {
+                            resolution: previewVideo.videoWidth && previewVideo.videoHeight
+                                ? previewVideo.videoWidth + " x " + previewVideo.videoHeight
+                                : "-",
+                            format: file.type || getFileExtension(file.name)
+                        }
+                    });
+
+                    warning.textContent = "Video metadata in this browser view is strongest for technical and administrative fields. Container-specific tags depend on the file.";
+                    resolve();
+                };
+
+                previewVideo.onerror = () => {
+                    URL.revokeObjectURL(objectUrl);
+                    reject(new Error("The selected file could not be processed as a video."));
+                };
+
+                previewVideo.onloadeddata = () => {
+                    URL.revokeObjectURL(objectUrl);
+                };
+            });
+        }
+
+        async function handleFileSelection() {
+            const file = fileInput.files[0];
+
+            if (!file) {
+                return;
+            }
+
+            warning.textContent = "";
+            reportLines = [];
+            currentReportName = buildReportName(file.name);
+            downloadBtn.disabled = true;
+            output.textContent = "Reading metadata...";
+            resetPreview();
+
+            try {
+                if (file.type.startsWith("image/")) {
+                    setStatus("Processing the image locally...", "info");
+                    await readImageMetadata(file);
+                    appendBackendSections(await fetchBackendMetadata(file));
+                    finalizeReport("Image metadata extraction complete.");
+                    return;
+                }
+
+                if (file.type.startsWith("video/")) {
+                    setStatus("Processing the video locally...", "info");
+                    await readVideoMetadata(file);
+                    appendBackendSections(await fetchBackendMetadata(file));
+                    finalizeReport("Video metadata extraction complete.");
+                    return;
+                }
+
+                if (isStructuredTextFile(file)) {
+                    setStatus("Processing the structured file locally...", "info");
+                    await readStructuredTextMetadata(file);
+                    appendBackendSections(await fetchBackendMetadata(file));
+                    finalizeReport("Structured metadata extraction complete.");
+                    return;
+                }
+
+                addSection("Basic File Information");
+                add("File Name", file.name);
+                add("File Type", file.type || "Unknown");
+                add("File Size", formatFileSize(file.size));
+                add("Modification Date", formatDateTime(file.lastModified));
+                addRequestedMetadataSections(file, {
+                    descriptive: {
+                        title: file.name
+                    },
+                    administrative: {
+                        fileSize: formatFileSize(file.size),
+                        fileType: file.type || "Unknown",
+                        modificationDate: formatDateTime(file.lastModified)
+                    },
+                    technical: {
+                        format: file.type || getFileExtension(file.name) || "Unknown"
+                    }
+                });
+                warning.textContent = "Deep extraction is limited for this file type in the browser, so the report shows the metadata that can be safely derived locally.";
+                appendBackendSections(await fetchBackendMetadata(file));
+                finalizeReport("Basic file metadata extraction complete.");
+            } catch (error) {
+                console.error("Metadata extraction failed:", error);
+                output.textContent = error.message;
+                warning.textContent = "";
+                downloadBtn.disabled = true;
+                setStatus("Metadata extraction failed. Choose a valid supported file.", "error");
+            }
+        }
+
+        fileInput.addEventListener("change", handleFileSelection);
+
+        downloadBtn.addEventListener("click", () => {
+            if (!reportLines.length) {
+                return;
+            }
+
+            const jsPdfApi = window.jspdf;
+
+            if (!jsPdfApi || !jsPdfApi.jsPDF) {
+                setStatus("The PDF export library is unavailable.", "error");
+                return;
+            }
+
+            const doc = new jsPdfApi.jsPDF();
+            let y = 10;
+
+            doc.setFont("Courier", "normal");
+            doc.setFontSize(10);
+
+            reportLines.forEach(line => {
+                const wrappedLines = doc.splitTextToSize(line, 180);
+
+                wrappedLines.forEach(wrappedLine => {
+                    if (y > 280) {
+                        doc.addPage();
+                        y = 10;
+                    }
+
+                    doc.text(wrappedLine, 10, y);
+                    y += 6;
+                });
+
+                if (y > 280) {
+                    doc.addPage();
+                    y = 10;
+                }
+            });
+
+            doc.save(currentReportName);
+            setStatus("Report downloaded successfully.", "success");
+        });
+    </script>
+</body>
+</html>

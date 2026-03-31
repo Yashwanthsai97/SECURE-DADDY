@@ -1,0 +1,2617 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Lock or unlock PDF files locally with the SecureDaddy PDF protection demo.">
+    <title>SecureDaddy | PDF Protection</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@400;600;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+:root {
+    color-scheme: dark;
+    --bg: #070607;
+    --bg-soft: rgba(255, 255, 255, 0.05);
+    --panel: rgba(15, 17, 20, 0.88);
+    --panel-border: rgba(255, 255, 255, 0.1);
+    --text: #f8f5ef;
+    --muted: #bcb5ab;
+    --accent: #f5ab2f;
+    --accent-strong: #ff8a22;
+    --accent-soft: rgba(245, 171, 47, 0.18);
+    --danger: #ff7272;
+    --success: #6dd39e;
+    --info: #8ec7ff;
+    --shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+    --focus-ring: rgba(245, 171, 47, 0.95);
+    --header-bg:
+        linear-gradient(90deg, rgba(18, 14, 10, 0.96), rgba(9, 11, 15, 0.94) 52%, rgba(12, 18, 22, 0.94));
+    --header-border: rgba(255, 214, 138, 0.1);
+    --surface-1: rgba(255, 255, 255, 0.04);
+    --surface-2: rgba(255, 255, 255, 0.06);
+    --surface-3: rgba(255, 255, 255, 0.02);
+    --surface-strong: rgba(9, 10, 12, 0.82);
+    --surface-elevated: rgba(10, 10, 10, 0.78);
+    --surface-border: rgba(255, 255, 255, 0.08);
+    --surface-border-strong: rgba(255, 255, 255, 0.14);
+    --heading-strong: #fff3de;
+    --input-bg: rgba(255, 255, 255, 0.05);
+    --input-border: rgba(255, 255, 255, 0.14);
+    --input-placeholder: #918c83;
+    --button-soft-hover: rgba(255, 255, 255, 0.08);
+    --preview-bg: rgba(255, 255, 255, 0.03);
+    --footer-bottom-text: #8d877f;
+    --hero-glow-primary: rgba(245, 166, 35, 0.2);
+    --hero-glow-secondary: rgba(142, 199, 255, 0.14);
+    --hero-before-glow: radial-gradient(circle, rgba(245, 171, 47, 0.22), transparent 70%);
+    --hero-after-glow: radial-gradient(circle, rgba(214, 220, 228, 0.14), transparent 72%);
+    --page-background:
+        radial-gradient(circle at 18% 16%, rgba(255, 196, 88, 0.24), transparent 24%),
+        radial-gradient(circle at 82% 22%, rgba(255, 138, 34, 0.18), transparent 22%),
+        radial-gradient(circle at 58% 72%, rgba(132, 151, 175, 0.08), transparent 28%),
+        linear-gradient(140deg, #1b1007 0%, #090607 30%, #090c10 58%, #050507 100%);
+    --page-overlay:
+        radial-gradient(circle at 15% 24%, rgba(255, 204, 101, 0.18), transparent 16%),
+        radial-gradient(circle at 78% 32%, rgba(214, 222, 231, 0.09), transparent 18%),
+        radial-gradient(circle at 56% 84%, rgba(255, 132, 28, 0.12), transparent 18%);
+    --page-grid:
+        linear-gradient(115deg, rgba(255, 255, 255, 0.03), transparent 28%, transparent 72%, rgba(255, 198, 84, 0.04)),
+        repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.016) 0 1px, transparent 1px 116px),
+        repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.012) 0 1px, transparent 1px 116px);
+    --radius-lg: 22px;
+    --radius-md: 14px;
+    --radius-sm: 10px;
+}
+
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 120px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+body {
+    position: relative;
+    font-family: "Space Grotesk", Arial, sans-serif;
+    color: var(--text);
+    overflow-x: hidden;
+    background: var(--page-background);
+    background-attachment: fixed;
+}
+
+body::before,
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+}
+
+body::before {
+    inset: -10% -8%;
+    background: var(--page-overlay);
+    filter: blur(22px);
+    opacity: 0.95;
+}
+
+body::after {
+    background: var(--page-grid);
+    opacity: 0.18;
+}
+
+body[data-theme="light"] {
+    color-scheme: light;
+    --bg: #f6efe5;
+    --bg-soft: rgba(34, 39, 47, 0.05);
+    --panel: rgba(255, 250, 244, 0.9);
+    --panel-border: rgba(93, 104, 118, 0.14);
+    --text: #20252d;
+    --muted: #5a6471;
+    --accent: #d78616;
+    --accent-strong: #ef9732;
+    --accent-soft: rgba(215, 134, 22, 0.16);
+    --danger: #c55454;
+    --success: #2f845d;
+    --info: #3d77aa;
+    --shadow: 0 24px 54px rgba(86, 70, 42, 0.16);
+    --focus-ring: rgba(215, 134, 22, 0.9);
+    --header-bg:
+        linear-gradient(90deg, rgba(255, 248, 238, 0.96), rgba(246, 239, 229, 0.95) 52%, rgba(236, 241, 247, 0.94));
+    --header-border: rgba(110, 121, 135, 0.16);
+    --surface-1: rgba(255, 255, 255, 0.66);
+    --surface-2: rgba(255, 255, 255, 0.82);
+    --surface-3: rgba(241, 233, 223, 0.72);
+    --surface-strong: rgba(255, 251, 246, 0.9);
+    --surface-elevated: rgba(255, 252, 247, 0.84);
+    --surface-border: rgba(93, 104, 118, 0.14);
+    --surface-border-strong: rgba(93, 104, 118, 0.2);
+    --heading-strong: #212833;
+    --input-bg: rgba(255, 255, 255, 0.74);
+    --input-border: rgba(100, 112, 126, 0.18);
+    --input-placeholder: #7c8693;
+    --button-soft-hover: rgba(215, 134, 22, 0.1);
+    --preview-bg: rgba(255, 255, 255, 0.72);
+    --footer-bottom-text: #6c7380;
+    --hero-glow-primary: rgba(245, 166, 35, 0.16);
+    --hero-glow-secondary: rgba(126, 140, 160, 0.16);
+    --hero-before-glow: radial-gradient(circle, rgba(255, 204, 110, 0.28), transparent 70%);
+    --hero-after-glow: radial-gradient(circle, rgba(172, 184, 198, 0.2), transparent 72%);
+    --page-background:
+        radial-gradient(circle at 18% 14%, rgba(255, 208, 122, 0.36), transparent 25%),
+        radial-gradient(circle at 84% 20%, rgba(239, 151, 50, 0.2), transparent 22%),
+        radial-gradient(circle at 60% 78%, rgba(154, 171, 190, 0.12), transparent 26%),
+        linear-gradient(140deg, #fff8ef 0%, #f6efe6 34%, #edf1f6 100%);
+    --page-overlay:
+        radial-gradient(circle at 16% 24%, rgba(255, 197, 85, 0.2), transparent 16%),
+        radial-gradient(circle at 78% 30%, rgba(138, 153, 171, 0.12), transparent 18%),
+        radial-gradient(circle at 50% 84%, rgba(240, 156, 58, 0.14), transparent 18%);
+    --page-grid:
+        linear-gradient(115deg, rgba(255, 255, 255, 0.18), transparent 32%, transparent 70%, rgba(255, 214, 138, 0.12)),
+        repeating-linear-gradient(90deg, rgba(51, 62, 76, 0.04) 0 1px, transparent 1px 116px),
+        repeating-linear-gradient(180deg, rgba(51, 62, 76, 0.03) 0 1px, transparent 1px 116px);
+}
+
+img,
+video {
+    max-width: 100%;
+    display: block;
+}
+
+button,
+input,
+a {
+    font: inherit;
+}
+
+a {
+    color: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+.skip-link {
+    position: absolute;
+    left: 16px;
+    top: -48px;
+    z-index: 2000;
+    padding: 10px 14px;
+    background: #ffffff;
+    color: #000000;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+    top: 16px;
+}
+
+body[data-theme="light"] .skip-link {
+    background: #20252d;
+    color: #ffffff;
+}
+
+:focus-visible {
+    outline: 3px solid var(--focus-ring);
+    outline-offset: 3px;
+}
+
+.header,
+section,
+footer {
+    position: relative;
+    z-index: 1;
+}
+
+.header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    margin-right: 0%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 50%;
+    width: 100%;
+    margin: 0px auto 0;
+    padding: 18px 24px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.24);
+    background: var(--header-bg);
+    border-bottom: 1px solid var(--header-border);
+    backdrop-filter: blur(12px);
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-left: auto;
+}
+
+
+.logo-area {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-width: 0;
+}
+
+.logo {
+    width: 56px;
+    flex-shrink: 0;
+    transform: translateX(-28px);
+    opacity: 0;
+    animation: slideInLogo 1s ease forwards;
+}
+
+.eyebrow {
+    color: var(--accent);
+    font-size: 0.78rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+}
+
+.logo-area h1,
+.hero-left h2,
+.services h2,
+.feature-band h2,
+.metadata-box h2,
+.lock-box h2 {
+    font-family: "Oxanium", sans-serif;
+}
+
+.logo-area h1 {
+    font-size: clamp(1.65rem, 3vw, 2.2rem);
+    letter-spacing: 0.04em;
+}
+
+.main-nav {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    margin-left: 0;
+    margin-right: 0;
+    gap: clamp(24px, 2.4vw, 34px);
+}
+
+.main-nav a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.96rem;
+    transition: color 0.9s ease;
+}
+
+.main-nav a:hover,
+.main-nav a:focus-visible {
+    color: var(--text);
+}
+
+.theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 4px;
+    background: transparent;
+    color: var(--text);
+    border: none;
+    border-radius: 999px;
+    flex-shrink: 0;
+}
+
+.theme-toggle-track {
+    position: relative;
+    width: 84px;
+    height: 44px;
+    border-radius: 999px;
+    overflow: hidden;
+    border: 1px solid var(--surface-border-strong);
+    background: linear-gradient(135deg, rgba(14, 24, 42, 0.95), rgba(34, 18, 8, 0.95));
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.12),
+        0 12px 24px rgba(0, 0, 0, 0.22);
+    transition:
+        background 320ms ease,
+        border-color 320ms ease,
+        box-shadow 320ms ease,
+        transform 220ms ease;
+}
+
+.theme-toggle-track::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 22% 30%, rgba(255, 255, 255, 0.16), transparent 16%),
+        radial-gradient(circle at 70% 70%, rgba(255, 186, 66, 0.12), transparent 18%);
+    transition: opacity 320ms ease;
+}
+
+.theme-toggle-icon {
+    position: absolute;
+    top: 50%;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    transform: translateY(-50%);
+    transition: opacity 320ms ease, transform 320ms ease, box-shadow 320ms ease;
+}
+
+.theme-toggle-icon-moon {
+    left: 13px;
+    background: rgba(246, 247, 251, 0.9);
+    box-shadow: -4px -1px 0 1px rgba(18, 22, 36, 0.95);
+}
+
+.theme-toggle-icon-sun {
+    right: 14px;
+    background: rgba(255, 214, 106, 0.95);
+    box-shadow:
+        0 0 0 4px rgba(255, 214, 106, 0.18),
+        0 0 18px rgba(255, 173, 43, 0.28);
+    opacity: 0.75;
+}
+
+.theme-toggle-thumb {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background:
+        radial-gradient(circle at 34% 34%, rgba(255, 255, 255, 0.9), rgba(234, 239, 248, 0.94) 54%, rgba(193, 202, 214, 0.96));
+    box-shadow:
+        0 10px 18px rgba(0, 0, 0, 0.26),
+        inset -6px -5px 12px rgba(146, 154, 168, 0.3);
+    transition:
+        transform 360ms cubic-bezier(0.22, 1, 0.36, 1),
+        background 320ms ease,
+        box-shadow 320ms ease;
+}
+
+.theme-toggle-thumb::before,
+.theme-toggle-thumb::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(143, 153, 167, 0.25);
+    transition: opacity 220ms ease, transform 320ms ease;
+}
+
+.theme-toggle-thumb::before {
+    width: 7px;
+    height: 7px;
+    top: 9px;
+    right: 8px;
+}
+
+.theme-toggle-thumb::after {
+    width: 5px;
+    height: 5px;
+    bottom: 8px;
+    left: 9px;
+}
+
+.theme-toggle-text {
+    min-width: 42px;
+    color: var(--muted);
+    font-size: 0.92rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    transition: color 220ms ease, transform 220ms ease;
+}
+
+.theme-toggle:hover .theme-toggle-track,
+.theme-toggle:focus-visible .theme-toggle-track {
+    transform: translateY(-1px) scale(1.01);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.12),
+        0 18px 30px rgba(0, 0, 0, 0.24);
+}
+
+.theme-toggle:hover .theme-toggle-text,
+.theme-toggle:focus-visible .theme-toggle-text {
+    color: var(--text);
+}
+
+body[data-theme="light"] .theme-toggle-track {
+    background: linear-gradient(135deg, rgba(255, 212, 112, 0.98), rgba(239, 151, 50, 0.96));
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.3),
+        0 12px 24px rgba(215, 134, 22, 0.18);
+}
+
+body[data-theme="light"] .theme-toggle-track::before {
+    opacity: 0.6;
+}
+
+body[data-theme="light"] .theme-toggle-icon-moon {
+    opacity: 0.35;
+    transform: translateY(-50%) scale(0.88);
+}
+
+body[data-theme="light"] .theme-toggle-icon-sun {
+    opacity: 1;
+    transform: translateY(-50%) scale(1.05);
+}
+
+body[data-theme="light"] .theme-toggle-thumb {
+    transform: translateX(40px) rotate(180deg);
+    background:
+        radial-gradient(circle at 34% 34%, rgba(255, 255, 255, 0.98), rgba(255, 239, 186, 0.98) 58%, rgba(255, 201, 95, 0.98));
+    box-shadow:
+        0 10px 20px rgba(215, 134, 22, 0.24),
+        inset -6px -5px 12px rgba(255, 186, 60, 0.24);
+}
+
+body[data-theme="light"] .theme-toggle-thumb::before,
+body[data-theme="light"] .theme-toggle-thumb::after {
+    opacity: 0;
+    transform: scale(0.5);
+}
+
+.hero,
+.services,
+.feature-band,
+.footer {
+    width: 1400px;
+    margin: 0 auto;
+}
+
+.hero {
+    position: relative;
+    /* allows absolute elements inside */
+
+    display: grid;
+    /* use grid layout */
+
+    /* keep the right side slightly roomier for the media preview */
+    grid-template-columns: minmax(0, 0.96fr) minmax(0, 1.04fr);
+
+    align-items: center;
+    /* center content vertically */
+    gap: 18px;
+    /* space between columns */
+
+    /* spacing inside the section */
+    padding-top: 36px;
+    padding-bottom: 0;
+
+    /* almost full screen height */
+    min-height: 76vh;
+
+    overflow: visible;
+    /* allow elements to overflow */
+}
+
+.hero::before,
+.hero::after {
+    content: "";
+    position: absolute;
+    border-radius: 10%;
+    filter: blur(40px);
+    pointer-events: none;
+    opacity: 0.75;
+}
+
+.hero::before {
+    width: 100%;
+    height: 260px;
+    top: 40px;
+    left: 80px;
+    background: var(--hero-before-glow);
+}
+
+.hero::after {
+    width: 100%;
+    height: 220px;
+    right: 50px;
+    bottom: 10px;
+    background: var(--hero-after-glow);
+}
+
+.left-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 620px;
+    min-height: 100%;
+}
+
+.hero-left,
+.auth-box {
+    position: absolute;
+    inset: 0;
+    transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.hero-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 36px 38px;
+    background: transparent;
+    /* linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02)),
+        linear-gradient(180deg, rgba(245, 166, 35, 0.08), rgba(8, 8, 8, 0.78)); */
+    overflow: hidden;
+}
+
+/* .hero-left::before {
+    content: "";
+    position: absolute;
+    inset: auto -10% -28% 35%;
+    height: 350px;
+    background: radial-gradient(circle, rgba(245, 166, 35, 0.18), transparent 68%);
+    pointer-events: none;
+    z-index: 0;
+} */
+
+.hero-left>* {
+    position: relative;
+    z-index: 1;
+}
+
+.hero-tag,
+.section-tag,
+.media-label {
+    color: var(--accent);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+/* .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    width: fit-content;
+    margin-bottom: 18px;
+    padding: 10px 16px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    color: #f8efe3;
+    font-size: 0.88rem;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+} */
+
+/* .hero-badge-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), #ffd36f);
+    box-shadow: 0 0 14px rgba(245, 166, 35, 0.65);
+    animation: heroPulse 1.8s ease-in-out infinite;
+} */
+
+.hero-tag {
+    margin-bottom: 14px;
+}
+
+.hero-left h2 {
+    position: relative;
+    font-size: clamp(32px, 5vw, 56px);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -1px;
+    /* text-wrap: balance; */
+}
+
+.hero-copy {
+    position: relative;
+    font-size: clamp(1rem, 1.6vw, 1.12rem);
+    line-height: 1.8;
+    color: var(--muted);
+    max-width: 54ch;
+    margin-bottom: 24px;
+}
+
+.buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 28px;
+}
+
+.primary-btn,
+.secondary-btn,
+.back-link,
+.icon-btn,
+.text-link {
+    border: none;
+    transform: translateY(0) scale(1);
+    will-change: transform, box-shadow, background-color, border-color, color;
+    transition:
+        transform 220ms cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 240ms cubic-bezier(0.22, 1, 0.36, 1),
+        background-color 240ms ease,
+        background 240ms ease,
+        color 220ms ease,
+        border-color 240ms ease,
+        opacity 220ms ease;
+}
+
+.primary-btn {
+    background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+    color: #111111;
+    font-weight: 700;
+    border-radius: 999px;
+    padding: 14px 24px;
+    box-shadow: 0 12px 30px rgba(245, 166, 35, 0.2);
+}
+
+.primary-btn:not(:disabled):hover,
+.primary-btn:not(:disabled):focus-visible {
+    transform: translateY(-3px) scale(1.01);
+    box-shadow: 0 20px 36px rgba(245, 166, 35, 0.3);
+}
+
+.primary-btn:not(:disabled):active {
+    transform: translateY(0) scale(0.98);
+    box-shadow: 0 8px 18px rgba(245, 166, 35, 0.18);
+}
+
+.secondary-btn,
+.back-link {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--surface-3);
+    color: var(--text);
+    border: 1px solid var(--surface-border-strong);
+    border-radius: 999px;
+    padding: 13px 22px;
+    text-decoration: none;
+}
+
+.secondary-btn:not(:disabled):hover,
+.secondary-btn:not(:disabled):focus-visible,
+.back-link:not(:disabled):hover,
+.back-link:not(:disabled):focus-visible {
+    background: var(--button-soft-hover);
+    border-color: var(--surface-border-strong);
+    transform: translateY(-2px);
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.2);
+}
+
+.secondary-btn:not(:disabled):active,
+.back-link:not(:disabled):active {
+    transform: translateY(0) scale(0.985);
+    box-shadow: 0 7px 16px rgba(0, 0, 0, 0.14);
+}
+
+.hero-trust-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 22px;
+}
+
+.hero-trust-pills span {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 14px;
+    border-radius: 999px;
+    background: var(--surface-2);
+    border: 1px solid var(--surface-border);
+    color: var(--muted);
+    font-size: 0.9rem;
+}
+
+.hero-metrics {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.hero-metric {
+    position: relative;
+    padding: 18px 16px;
+    border-radius: 20px;
+    background:
+        linear-gradient(145deg, var(--surface-2), var(--surface-1) 44%, var(--surface-3));
+    border: 1px solid var(--surface-border);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.hero-metric strong {
+    display: block;
+    font-family: "Oxanium", sans-serif;
+    font-size: 1.7rem;
+    color: #fff3de;
+    margin-bottom: 8px;
+}
+
+.hero-metric span {
+    color: var(--muted);
+    line-height: 1.6;
+    font-size: 0.92rem;
+}
+
+.hero-right {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 640px;
+    padding: 18px;
+}
+
+.hero-glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(18px);
+    pointer-events: none;
+}
+
+.hero-glow-one {
+    width: 220px;
+    height: 220px;
+    top: 50px;
+    right: -1px;
+    background: var(--hero-glow-primary);
+}
+
+.hero-glow-two {
+    width: 180px;
+    height: 180px;
+    left: 1px;
+    bottom: 50px;
+    background: var(--hero-glow-secondary);
+}
+
+.hero-media-card {
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    padding: 6px;
+    border-radius: 30px;
+    background:
+        linear-gradient(180deg, var(--surface-2), var(--surface-3)),
+        var(--surface-strong);
+    border: 1px solid var(--surface-border-strong);
+    box-shadow: var(--shadow);
+    z-index: 2;
+}
+
+/* .hero-media-top {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 16px;
+} */
+
+/* .media-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 9px 14px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.05);
+    color: #efe5d6;
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+} */
+
+/* .media-pill-live {
+    color: #121212;
+    background: linear-gradient(135deg, #ffd174, var(--accent));
+    border-color: transparent;
+} */
+
+/* .media-label {
+    position: absolute;
+    top: 18px;
+    left: 18px;
+    z-index: 2;
+    margin-bottom: 0;
+} */
+
+.hero-screen {
+    position: relative;
+    overflow: hidden;
+    min-height: 460px;
+    width: 100%;
+    border-radius: 24px;
+    border: 1px solid var(--surface-border);
+    background: var(--panel);
+}
+
+.hero-media-card video {
+    border-radius: 24px;
+    width: 100%;
+    min-height: 460px;
+    object-fit: cover;
+    filter: saturate(1.08) contrast(1.05);
+}
+
+/* .hero-screen-overlay {
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(180deg, rgba(4, 4, 4, 0.02), rgba(4, 4, 4, 0.62)),
+        linear-gradient(135deg, rgba(245, 166, 35, 0.16), transparent 42%);
+    pointer-events: none;
+} */
+
+/* .hero-screen-badge {
+    position: absolute;
+    left: 18px;
+    bottom: 18px;
+    padding: 16px 18px;
+    border-radius: 18px;
+    background: rgba(8, 8, 8, 0.72);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    max-width: 250px;
+    z-index: 2;
+} */
+
+.screen-badge-label,
+.hero-mini-tag,
+.float-card-label {
+    display: inline-block;
+    font-size: 0.76rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    margin-bottom: 8px;
+}
+
+.hero-screen-badge strong,
+.hero-mini-card strong,
+.hero-float-card strong {
+    display: block;
+    color: var(--heading-strong);
+    font-size: 1.05rem;
+    margin-bottom: 6px;
+}
+
+.hero-screen-badge small,
+.hero-mini-card p,
+.hero-float-card p {
+    color: var(--muted);
+    line-height: 1.65;
+}
+
+.hero-media-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    margin-top: 16px;
+}
+
+.hero-mini-card {
+    padding: 18px;
+    border-radius: 20px;
+    background:
+        linear-gradient(145deg, var(--surface-2), var(--surface-1) 48%, var(--surface-3));
+    border: 1px solid var(--surface-border);
+}
+
+.hero-float-card {
+    position: absolute;
+    padding: 18px;
+    width: min(220px, 100%);
+    border-radius: 22px;
+    background:
+        linear-gradient(145deg, var(--surface-2), var(--surface-elevated));
+    border: 1px solid var(--surface-border);
+    box-shadow: 0 18px 42px rgba(0, 0, 0, 0.28);
+    backdrop-filter: blur(16px);
+    z-index: 3;
+    animation: heroFloat 6s ease-in-out infinite;
+}
+
+.hero-float-card-left {
+    top: 70px;
+    left: -10px;
+}
+
+.hero-float-card-right {
+    right: -10px;
+    bottom: 68px;
+    animation-delay: -3s;
+}
+
+.hidden {
+    opacity: 0;
+    transform: translateX(-32px);
+    pointer-events: none;
+}
+
+.visible {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+}
+
+.auth-box {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    justify-content: center;
+    padding: 30px;
+    background: transparent;
+    /* linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.03)),
+        rgba(10, 10, 10, 0.82); */
+}
+
+.auth-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+}
+
+.auth-header h3 {
+    font-size: 1.55rem;
+}
+
+.icon-btn {
+    background: transparent;
+    color: var(--accent);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.icon-btn:not(:disabled):hover,
+.icon-btn:not(:disabled):focus-visible {
+    background: var(--button-soft-hover);
+    transform: translateY(-1px) scale(1.04);
+}
+
+.icon-btn:not(:disabled):active {
+    transform: translateY(0) scale(0.94);
+}
+
+.auth-note,
+.switch-text,
+.tool-description,
+.section-heading p,
+.feature-band-copy p,
+.footer p,
+.footer a,
+.footer span,
+.input-hint {
+    color: var(--muted);
+    line-height: 1.7;
+}
+
+.field-label {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--heading-strong);
+    margin-top: 6px;
+}
+
+.auth-box input,
+.metadata-box input,
+.lock-box input,
+.lock-box select {
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: 12px;
+    border: 1px solid var(--input-border);
+    background: var(--input-bg);
+    color: var(--text);
+}
+
+.auth-box input::placeholder,
+.metadata-box input::placeholder,
+.lock-box input::placeholder {
+    color: var(--input-placeholder);
+}
+
+.lock-box select {
+    appearance: none;
+}
+
+.auth-box input:focus,
+.metadata-box input:focus,
+.lock-box input:focus,
+.lock-box select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px var(--accent-soft);
+    outline: none;
+}
+
+.text-link {
+    background: transparent;
+    color: var(--accent);
+    padding: 0;
+    font-weight: 700;
+}
+
+.text-link:not(:disabled):hover,
+.text-link:not(:disabled):focus-visible {
+    color: var(--accent-strong);
+    transform: translateY(-1px);
+}
+
+.text-link:not(:disabled):active {
+    transform: translateY(0);
+    opacity: 0.82;
+}
+
+.primary-btn:disabled,
+.secondary-btn:disabled,
+.back-link:disabled,
+.icon-btn:disabled,
+.text-link:disabled {
+    cursor: not-allowed;
+    opacity: 0.62;
+    transform: none;
+    box-shadow: none;
+    pointer-events: none;
+}
+
+#hero,
+.services,
+#about,
+#contact {
+    scroll-margin-top: 120px;
+}
+
+.services {
+    padding: 1px 0 30px;
+}
+
+.section-heading {
+    max-width: 760px;
+    margin-bottom: 24px;
+}
+
+.services h2,
+.feature-band h2,
+.metadata-box h2,
+.lock-box h2 {
+    font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1.15;
+    margin: 12px 0 12px;
+}
+
+.service-container {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 22px;
+}
+
+.service-card {
+    position: relative;
+    overflow: hidden;
+    min-height: 230px;
+    padding: 28px;
+    border-radius: 20px;
+    background:
+        linear-gradient(180deg, var(--surface-2), var(--surface-3)),
+        var(--surface-1);
+    border: 1px solid var(--surface-border);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease, border-color 0.25s ease;
+}
+
+.service-card:hover,
+.service-card:focus-visible {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+    background:
+        linear-gradient(180deg, var(--accent-soft), var(--surface-3)),
+        var(--surface-2);
+    border-color: var(--surface-border-strong);
+}
+
+.service-card-action {
+    cursor: pointer;
+}
+
+.service-card-link {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+}
+
+.service-icon {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 56px;
+    height: 56px;
+    font-size: 1.75rem;
+    margin-bottom: 18px;
+    background: var(--accent-soft);
+    border-radius: 16px;
+    box-shadow: inset 0 0 0 1px rgba(245, 166, 35, 0.16);
+}
+
+.service-card h3 {
+    color: var(--heading-strong);
+    font-size: 1.24rem;
+    margin-bottom: 14px;
+}
+
+.service-card p {
+    color: var(--muted);
+    line-height: 1.7;
+}
+
+.feature-band {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 20px;
+    padding: 4px 0 38px;
+}
+
+.feature-band-copy,
+.feature-band-metrics {
+    padding: 28px;
+    border-radius: 20px;
+    background:
+        linear-gradient(180deg, var(--surface-2), var(--surface-3)),
+        var(--surface-1);
+    border: 1px solid var(--surface-border);
+}
+
+.feature-band-metrics {
+    display: grid;
+    gap: 18px;
+}
+
+.feature-band-metrics strong {
+    display: block;
+    margin-bottom: 6px;
+    color: var(--heading-strong);
+}
+
+.feature-band-metrics span {
+    color: var(--muted);
+    line-height: 1.7;
+}
+
+.metadata-tool,
+.lock-tool {
+    display: none;
+    min-height: 80vh;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 30px 16px 44px;
+}
+
+.tool-page-main {
+    min-height: calc(100vh - 180px);
+}
+
+.tool-page .metadata-tool,
+.tool-page .lock-tool {
+    display: flex;
+    min-height: auto;
+    padding-top: 34px;
+}
+
+.metadata-box,
+.lock-box {
+    width: min(760px, 100%);
+    padding: 36px;
+    border-radius: 24px;
+    background:
+        linear-gradient(180deg, var(--surface-2), var(--surface-3)),
+        var(--panel);
+    border: 1px solid var(--panel-border);
+    box-shadow: var(--shadow);
+    margin: 0 auto;
+}
+
+.back-link {
+    margin-bottom: 22px;
+}
+
+.tool-description {
+    margin-bottom: 18px;
+}
+
+.input-hint {
+    font-size: 0.92rem;
+    margin-top: 8px;
+}
+
+.field-label-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    margin-top: 6px;
+}
+
+.field-label-row .field-label {
+    margin-top: 0;
+}
+
+.password-strength-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    min-width: 108px;
+    padding: 9px 14px;
+    border-radius: 999px;
+    background:
+        linear-gradient(135deg, var(--surface-2), var(--surface-3)),
+        var(--surface-1);
+    border: 1px solid var(--surface-border);
+    color: var(--heading-strong);
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    transition: background 240ms ease, border-color 240ms ease, color 240ms ease, transform 220ms ease;
+}
+
+.password-strength-badge[data-strength="empty"] {
+    color: var(--muted);
+}
+
+.password-strength-badge[data-strength="weak"] {
+    background: rgba(255, 114, 114, 0.12);
+    border-color: rgba(255, 114, 114, 0.44);
+    color: #ffd8d8;
+    box-shadow: 0 8px 18px rgba(255, 114, 114, 0.14);
+    transform: translateY(-1px);
+}
+
+.password-strength-badge[data-strength="fair"] {
+    background: rgba(255, 179, 87, 0.14);
+    border-color: rgba(255, 179, 87, 0.42);
+    color: #ffe1be;
+    box-shadow: 0 8px 18px rgba(255, 179, 87, 0.14);
+    transform: translateY(-1px);
+}
+
+.password-strength-badge[data-strength="good"] {
+    background: rgba(142, 199, 255, 0.14);
+    border-color: rgba(142, 199, 255, 0.42);
+    color: #dceeff;
+    box-shadow: 0 8px 18px rgba(142, 199, 255, 0.14);
+    transform: translateY(-1px);
+}
+
+.password-strength-badge[data-strength="strong"] {
+    background: rgba(109, 211, 158, 0.15);
+    border-color: rgba(109, 211, 158, 0.44);
+    color: #ddffed;
+    box-shadow: 0 8px 18px rgba(109, 211, 158, 0.14);
+    transform: translateY(-1px);
+}
+
+body[data-theme="light"] .password-strength-badge[data-strength="weak"] {
+    color: #a63b3b;
+}
+
+body[data-theme="light"] .password-strength-badge[data-strength="fair"] {
+    color: #a66310;
+}
+
+body[data-theme="light"] .password-strength-badge[data-strength="good"] {
+    color: #2d6692;
+}
+
+body[data-theme="light"] .password-strength-badge[data-strength="strong"] {
+    color: #236647;
+}
+
+.preview-area {
+    margin: 24px 0 16px;
+    text-align: center;
+    padding: 20px;
+    border-radius: 18px;
+    border: 1px dashed var(--surface-border-strong);
+    background: var(--preview-bg);
+}
+
+.file-preview {
+    max-width: min(260px, 100%);
+    max-height: 240px;
+    margin: 16px auto 0;
+    border-radius: 14px;
+    object-fit: cover;
+}
+
+.file-preview-badge {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 140px;
+    min-height: 140px;
+    margin: 16px auto 0;
+    padding: 18px;
+    border-radius: 18px;
+    border: 1px dashed var(--surface-border-strong);
+    background: var(--surface-1);
+    color: var(--heading-strong);
+    font-family: "Oxanium", sans-serif;
+    font-size: 1.5rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.loader {
+    width: 44px;
+    height: 44px;
+    margin: 0 auto;
+    border: 4px solid var(--surface-border-strong);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.9s linear infinite;
+}
+
+.scan-text {
+    margin-top: 12px;
+    color: var(--accent);
+}
+
+.status-message {
+    margin-top: 18px;
+    padding: 14px 16px;
+    border-radius: 14px;
+    border: 1px solid transparent;
+    line-height: 1.6;
+}
+
+.info-message {
+    color: #d9ecff;
+    background: rgba(142, 199, 255, 0.08);
+    border-color: rgba(142, 199, 255, 0.2);
+}
+
+.success-message {
+    color: #e5fff0;
+    background: rgba(109, 211, 158, 0.09);
+    border-color: rgba(109, 211, 158, 0.24);
+}
+
+.error-message {
+    color: #ffe8e8;
+    background: rgba(255, 114, 114, 0.09);
+    border-color: rgba(255, 114, 114, 0.2);
+}
+
+.metadata-output {
+    margin-top: 20px;
+    display: grid;
+    gap: 16px;
+}
+
+.metadata-summary {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 18px;
+}
+
+.metadata-summary-card {
+    padding: 14px 16px;
+    border-radius: 16px;
+    background: var(--surface-1);
+    border: 1px solid var(--surface-border);
+}
+
+.metadata-summary-label {
+    display: block;
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+}
+
+.metadata-summary-value {
+    display: block;
+    color: var(--heading-strong);
+    font-weight: 700;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}
+
+.metadata-section {
+    padding: 18px;
+    border-radius: 18px;
+    background: var(--surface-1);
+    border: 1px solid var(--surface-border);
+}
+
+.metadata-section h4 {
+    color: var(--heading-strong);
+    margin-bottom: 12px;
+    font-size: 1rem;
+}
+
+.metadata-section p {
+    color: var(--muted);
+    line-height: 1.7;
+    overflow-wrap: anywhere;
+}
+
+.metadata-section strong {
+    color: var(--text);
+}
+
+.metadata-actions,
+.lock-mode-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+}
+
+.metadata-actions {
+    margin-top: 22px;
+}
+
+.lock-mode-buttons {
+    margin: 20px 0 18px;
+}
+
+.lock-mode-buttons .active {
+    box-shadow: 0 12px 30px rgba(245, 166, 35, 0.2);
+}
+
+.lock-summary,
+.lock-option-panel {
+    margin-top: 16px;
+    padding: 18px;
+    border-radius: 18px;
+    background: var(--surface-1);
+    border: 1px solid var(--surface-border);
+}
+
+.lock-summary-title {
+    color: var(--heading-strong);
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.lock-summary-meta {
+    color: var(--muted);
+    line-height: 1.7;
+}
+
+.lock-options-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.lock-permissions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px 12px;
+    margin-top: 10px;
+}
+
+.lock-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--muted);
+}
+
+.lock-checkbox input {
+    width: auto;
+    margin: 0;
+    accent-color: var(--accent);
+}
+
+.lock-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 18px;
+}
+
+.footer {
+    padding: 28px 0 22px;
+}
+
+.footer-container {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: 24px;
+    padding: 28px;
+    border-radius: 22px;
+    background:
+        linear-gradient(180deg, var(--surface-2), var(--surface-3)),
+        var(--surface-1);
+    border: 1px solid var(--surface-border);
+}
+
+.footer h3,
+.footer h4 {
+    margin-bottom: 14px;
+}
+
+.footer h4 {
+    color: var(--accent);
+}
+
+.footer a {
+    display: block;
+    text-decoration: none;
+    margin-bottom: 10px;
+}
+
+.footer a:hover,
+.footer a:focus-visible {
+    color: var(--text);
+}
+
+.footer-bottom {
+    text-align: center;
+    color: var(--footer-bottom-text);
+    margin-top: 14px;
+    font-size: 0.92rem;
+}
+
+.ripple {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    background: rgba(255, 255, 255, 0.28);
+    animation: rippleEffect 0.6s linear;
+    pointer-events: none;
+}
+
+@keyframes slideInLogo {
+    0% {
+        transform: translateX(-28px);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes rippleEffect {
+    to {
+        transform: translate(-50%, -50%) scale(10);
+        opacity: 0;
+    }
+}
+
+@keyframes heroFloat {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes heroPulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.18);
+        opacity: 0.85;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .theme-toggle-track,
+    .theme-toggle-track::before,
+    .theme-toggle-icon,
+    .theme-toggle-thumb,
+    .theme-toggle-thumb::before,
+    .theme-toggle-thumb::after,
+    .theme-toggle-text {
+        transition: none;
+    }
+}
+
+@media (max-width: 1280px) {
+
+    .header,
+    .hero,
+    .services,
+    .feature-band,
+    .footer {
+        width: min(1120px, calc(100% - 28px));
+    }
+
+    .hero {
+        grid-template-columns: minmax(0, 0.94fr) minmax(360px, 1.06fr);
+    }
+
+    .service-container {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 1100px) {
+    .hero {
+        grid-template-columns: 1fr;
+        min-height: auto;
+        gap: 32px;
+    }
+
+    .left-wrapper {
+        max-width: 100%;
+        min-height: 600px;
+    }
+
+    .feature-band,
+    .footer-container {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .hero-left h2 {
+        max-width: 11ch;
+    }
+
+    .hero-media-card {
+        max-width: none;
+    }
+
+    .hero-right {
+        display: grid;
+        gap: 18px;
+        min-height: auto;
+        padding: 0;
+    }
+
+    .hero-float-card {
+        position: static;
+        width: 100%;
+        animation: none;
+    }
+}
+
+@media (max-width: 760px) {
+    .header {
+        width: calc(100% - 20px);
+        margin-top: 10px;
+        padding: 16px 18px;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .header-actions {
+        width: 100%;
+        flex-wrap: wrap;
+        gap: 14px 16px;
+    }
+
+    .main-nav {
+        width: 100%;
+        margin-right: 0;
+        justify-content: flex-start;
+        gap: 20px;
+    }
+
+    .hero,
+    .services,
+    .feature-band,
+    .footer {
+        width: calc(100% - 20px);
+    }
+
+    .hero {
+        padding-top: 36px;
+    }
+
+    .left-wrapper {
+        min-height: 700px;
+    }
+
+    .hero-left h2 {
+        font-size: 2.5rem;
+        max-width: none;
+    }
+
+    .hero-left,
+    .auth-box {
+        padding: 26px;
+        border-radius: 24px;
+    }
+
+    .hero-badge {
+        font-size: 0.8rem;
+        margin-bottom: 14px;
+    }
+
+    .hero-metrics,
+    .hero-media-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .hero-media-card video,
+    .hero-screen {
+        min-height: 300px;
+    }
+
+    .hero-screen-badge {
+        max-width: 220px;
+    }
+
+    .service-container,
+    .feature-band,
+    .footer-container {
+        grid-template-columns: 1fr;
+    }
+
+    .metadata-box,
+    .lock-box,
+    .footer-container,
+    .feature-band-copy,
+    .feature-band-metrics,
+    .auth-box {
+        padding: 24px;
+    }
+
+    .lock-options-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .metadata-summary {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 520px) {
+    .hero {
+        padding: 28px 0 40px;
+    }
+
+    .left-wrapper {
+        min-height: 760px;
+    }
+
+    .hero-left h2 {
+        font-size: 2.15rem;
+    }
+
+    .hero-trust-pills {
+        gap: 10px;
+    }
+
+    .hero-trust-pills span {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .buttons,
+    .metadata-actions,
+    .lock-mode-buttons,
+    .lock-actions {
+        flex-direction: column;
+    }
+
+    .primary-btn,
+    .secondary-btn,
+    .back-link {
+        width: 100%;
+    }
+
+    .theme-toggle-text {
+        display: none;
+    }
+
+    .field-label-row {
+        flex-wrap: wrap;
+    }
+
+    .service-card {
+        min-height: auto;
+    }
+
+    .lock-permissions {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 400px) {
+
+    .header,
+    .hero,
+    .services,
+    .feature-band,
+    .footer {
+        width: calc(100% - 14px);
+    }
+
+    .header {
+        padding: 14px;
+    }
+
+    .logo-area {
+        gap: 10px;
+    }
+
+    .logo {
+        width: 46px;
+    }
+
+    .hero-left h2 {
+        font-size: 1.9rem;
+    }
+
+    .hero-screen-badge {
+        left: 12px;
+        right: 12px;
+        bottom: 12px;
+        max-width: none;
+    }
+
+    .auth-box,
+    .metadata-box,
+    .lock-box,
+    .footer-container,
+    .feature-band-copy,
+    .feature-band-metrics {
+        padding: 18px;
+    }
+}
+
+</style>
+</head>
+<body class="tool-page" data-theme="dark">
+    <a class="skip-link" href="#mainContent">Skip to content</a>
+
+    <header class="header">
+        <div class="logo-area">
+            <img src="logo2.png" class="logo" alt="SecureDaddy logo">
+            <div>
+                <h1>SecureDaddy</h1>
+            </div>
+        </div>
+
+        <div class="header-actions">
+            <nav class="main-nav" aria-label="Primary">
+                <a href="SD.html#hero">Home</a>
+                <a href="SD.html#services">Tools</a>
+                <a href="metadata-tool.html">Metadata Tool</a>
+                <a href="SD.html#contact">Contact</a>
+            </nav>
+
+            <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to light mode" aria-pressed="false">
+                <span class="theme-toggle-track" aria-hidden="true">
+                    <span class="theme-toggle-icon theme-toggle-icon-moon"></span>
+                    <span class="theme-toggle-icon theme-toggle-icon-sun"></span>
+                    <span class="theme-toggle-thumb"></span>
+                </span>
+                <span class="theme-toggle-text" id="themeToggleText">Dark</span>
+            </button>
+        </div>
+    </header>
+
+    <main id="mainContent" class="tool-page-main">
+        <section class="lock-tool standalone-tool" aria-labelledby="lockToolTitle">
+            <div class="lock-box">
+                <a class="back-link" href="../SECURE-DADDY/templates/osint_tools_page.html">&larr; Back</a>
+
+                <p class="section-tag">PDF Demo</p>
+                <h2 id="lockToolTitle">Lock / Unlock PDF</h2>
+                <p class="tool-description">
+                    Add real browser-based PDF protection or remove it with the correct credentials. Files stay on your device the whole time.
+                </p>
+
+                <div class="lock-mode-buttons" role="tablist" aria-label="PDF mode">
+                    <button type="button" class="primary-btn active" data-mode="lock" aria-pressed="true">
+                        Lock PDF
+                    </button>
+                    <button type="button" class="secondary-btn" data-mode="unlock" aria-pressed="false">
+                        Unlock PDF
+                    </button>
+                </div>
+
+                <p class="input-hint" id="lockModeHint">
+                    Lock mode adds PDF protection with one password.
+                </p>
+
+                <label class="field-label" for="lockFileInput">Choose a PDF file</label>
+                <input type="file" id="lockFileInput" accept="application/pdf">
+
+                <div class="lock-summary" id="lockSummary" aria-live="polite">
+                    <p class="lock-summary-title">No PDF selected yet.</p>
+                    <p class="lock-summary-meta">Choose a PDF to review its details before locking or unlocking it.</p>
+                </div>
+
+                <div class="field-label-row">
+                    <label class="field-label" for="passwordInput" id="primaryPasswordLabel">Enter password</label>
+                    <span class="password-strength-badge" id="passwordStrengthBadge" data-strength="empty" aria-live="polite">Waiting</span>
+                </div>
+                <input type="password" id="passwordInput" placeholder="Enter the password for this PDF">
+                <p class="input-hint" id="passwordHint">
+                    Use one strong password. The same password will be needed later to unlock the protected PDF.
+                </p>
+
+                <div class="lock-option-panel" id="lockOptionsPanel">
+                    <div class="lock-options-grid">
+                        <div>
+                            <label class="field-label" for="protectionLevelSelect">Protection strength</label>
+                            <select id="protectionLevelSelect">
+                                <option value="basic">Basic protection</option>
+                                <option value="strong" selected>Strong protection</option>
+                            </select>
+                            <p class="input-hint" id="protectionHint">
+                                Strong protection uses stronger encryption and stricter default restrictions.
+                            </p>
+                        </div>
+
+                        <div>
+                            <p class="field-label">Allowed actions</p>
+                            <div class="lock-permissions">
+                                <label class="lock-checkbox">
+                                    <input type="checkbox" id="permissionPrint" checked>
+                                    <span>Print</span>
+                                </label>
+                                <label class="lock-checkbox">
+                                    <input type="checkbox" id="permissionCopy">
+                                    <span>Copy</span>
+                                </label>
+                                <label class="lock-checkbox">
+                                    <input type="checkbox" id="permissionModify">
+                                    <span>Modify</span>
+                                </label>
+                                <label class="lock-checkbox">
+                                    <input type="checkbox" id="permissionAnnotate">
+                                    <span>Annotate</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lock-actions">
+                    <button class="primary-btn" type="button" id="processButton">Protect PDF</button>
+                    <button class="secondary-btn" type="button" id="resetLockButton">Reset</button>
+                </div>
+
+                <div class="status-message info-message" id="lockStatus" aria-live="polite">
+                    Mode selected: LOCK. Choose a PDF and enter the password you want to apply.
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer" id="contact">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <h3>SecureDaddy</h3>
+                <p>Portfolio-grade cybersecurity UI concepts for modern digital products.</p>
+            </div>
+
+            <div class="footer-links">
+                <h4>Navigate</h4>
+                <a href="SD.html#hero">Home</a>
+                <a href="SD.html#services">Main Tools</a>
+                <a href="SD.html#about">Why Us</a>
+            </div>
+
+            <div class="footer-links">
+                <h4>Tools</h4>
+                <a href="metadata-tool.html">Metadata Viewer</a>
+                <a href="pdf-tool.html">PDF Protection</a>
+            </div>
+
+            <div class="footer-links">
+                <h4>Contact</h4>
+                <a href="mailto:support@securedaddy.com">support@securedaddy.com</a>
+                <a href="tel:+919000000000">+91 90000 00000</a>
+                <span>Client-side demo experience</span>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            &copy; 2026 SecureDaddy. All rights reserved.
+        </div>
+    </footer>
+<script>
+(function () {
+    const themeStorageKey = "securedaddy-theme";
+
+    function getSystemTheme() {
+        if (window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches) {
+            return "light";
+        }
+
+        return "dark";
+    }
+
+    function readSavedTheme() {
+        try {
+            const savedTheme = window.localStorage.getItem(themeStorageKey);
+
+            if (savedTheme === "light" || savedTheme === "dark") {
+                return savedTheme;
+            }
+        } catch (error) {
+            console.warn("Theme preference could not be read.", error);
+        }
+
+        return null;
+    }
+
+    function writeSavedTheme(theme) {
+        try {
+            window.localStorage.setItem(themeStorageKey, theme);
+        } catch (error) {
+            console.warn("Theme preference could not be saved.", error);
+        }
+    }
+
+    function applyTheme(theme) {
+        const resolvedTheme = theme === "light" ? "light" : "dark";
+        const isLightMode = resolvedTheme === "light";
+        const themeToggle = document.getElementById("themeToggle");
+        const themeToggleText = document.getElementById("themeToggleText");
+
+        document.body.dataset.theme = resolvedTheme;
+        document.documentElement.style.colorScheme = resolvedTheme;
+
+        if (!themeToggle) {
+            return;
+        }
+
+        themeToggle.setAttribute("aria-pressed", String(isLightMode));
+        themeToggle.setAttribute("aria-label", isLightMode ? "Switch to dark mode" : "Switch to light mode");
+
+        if (themeToggleText) {
+            themeToggleText.textContent = isLightMode ? "Light" : "Dark";
+        }
+    }
+
+    function initializeTheme() {
+        const themeToggle = document.getElementById("themeToggle");
+
+        applyTheme(readSavedTheme() || getSystemTheme());
+
+        if (!themeToggle || themeToggle.dataset.themeReady === "true") {
+            return;
+        }
+
+        themeToggle.dataset.themeReady = "true";
+        themeToggle.addEventListener("click", () => {
+            const nextTheme = document.body.dataset.theme === "light" ? "dark" : "light";
+
+            applyTheme(nextTheme);
+            writeSavedTheme(nextTheme);
+        });
+
+        if (window.matchMedia) {
+            const colorSchemeQuery = window.matchMedia("(prefers-color-scheme: light)");
+            const handleColorSchemeChange = event => {
+                if (readSavedTheme()) {
+                    return;
+                }
+
+                applyTheme(event.matches ? "light" : "dark");
+            };
+
+            if (typeof colorSchemeQuery.addEventListener === "function") {
+                colorSchemeQuery.addEventListener("change", handleColorSchemeChange);
+            } else if (typeof colorSchemeQuery.addListener === "function") {
+                colorSchemeQuery.addListener(handleColorSchemeChange);
+            }
+        }
+    }
+
+    window.SecureDaddyTheme = {
+        applyTheme: applyTheme,
+        getSystemTheme: getSystemTheme,
+        initializeTheme: initializeTheme
+    };
+
+    initializeTheme();
+})();
+
+
+const lockBox = document.querySelector(".lock-box");
+const lockStatus = document.getElementById("lockStatus");
+const lockFileInput = document.getElementById("lockFileInput");
+const passwordInput = document.getElementById("passwordInput");
+const lockOptionsPanel = document.getElementById("lockOptionsPanel");
+const protectionLevelSelect = document.getElementById("protectionLevelSelect");
+const protectionHint = document.getElementById("protectionHint");
+const primaryPasswordLabel = document.getElementById("primaryPasswordLabel");
+const passwordHint = document.getElementById("passwordHint");
+const passwordStrengthBadge = document.getElementById("passwordStrengthBadge");
+const lockModeHint = document.getElementById("lockModeHint");
+const lockSummary = document.getElementById("lockSummary");
+const processButton = document.getElementById("processButton");
+const resetLockButton = document.getElementById("resetLockButton");
+const lockModeButtons = document.querySelectorAll(".lock-mode-buttons button");
+const permissionPrint = document.getElementById("permissionPrint");
+const permissionCopy = document.getElementById("permissionCopy");
+const permissionModify = document.getElementById("permissionModify");
+const permissionAnnotate = document.getElementById("permissionAnnotate");
+
+let currentMode = "lock";
+let pdfRuntimePromise;
+
+function setStatus(element, message, type) {
+    element.textContent = message;
+    element.className = "status-message " + type + "-message";
+}
+
+function escapeHtml(value) {
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/\"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+}
+
+function formatFileSize(size) {
+    if (size < 1024) {
+        return size + " B";
+    }
+
+    if (size < 1024 * 1024) {
+        return (size / 1024).toFixed(2) + " KB";
+    }
+
+    return (size / (1024 * 1024)).toFixed(2) + " MB";
+}
+
+function resetLockTool() {
+    lockFileInput.value = "";
+    passwordInput.value = "";
+    protectionLevelSelect.value = "strong";
+    applyProtectionPreset(protectionLevelSelect.value);
+    updateLockSummary();
+    updateLockModeUI();
+    setStatus(lockStatus, getLockIdleMessage(), "info");
+    toggleLockProcessing(false);
+}
+
+function updateLockSummary() {
+    const file = lockFileInput.files[0];
+
+    if (!file) {
+        lockSummary.innerHTML =
+            "<p class=\"lock-summary-title\">No PDF selected yet.</p>" +
+            "<p class=\"lock-summary-meta\">Choose a PDF to review its details before locking or unlocking it.</p>";
+        return;
+    }
+
+    lockSummary.innerHTML =
+        "<p class=\"lock-summary-title\">" + escapeHtml(file.name) + "</p>" +
+        "<p class=\"lock-summary-meta\">" +
+        escapeHtml(formatFileSize(file.size)) +
+        " | " +
+        escapeHtml(file.type || "Unknown file type") +
+        "</p>";
+}
+
+function updateLockModeUI() {
+    const isLockMode = currentMode === "lock";
+
+    lockOptionsPanel.hidden = !isLockMode;
+    primaryPasswordLabel.textContent = "Enter password";
+    passwordInput.placeholder = isLockMode
+        ? "Enter a password to protect this PDF"
+        : "Enter the password used to protect this PDF";
+    passwordHint.textContent = isLockMode
+        ? "Use one strong password. The same password will be needed later to unlock the protected PDF."
+        : "Enter the password that was used when the PDF was protected.";
+    lockModeHint.textContent = isLockMode
+        ? "Lock mode adds PDF protection with one password."
+        : "Unlock mode removes PDF protection and downloads an unprotected copy when the password is correct.";
+    processButton.textContent = isLockMode ? "Protect PDF" : "Unlock PDF";
+    updatePasswordStrengthUI();
+}
+
+function evaluatePasswordStrength(password) {
+    const checks = {
+        length: password.length >= 8,
+        case: /[a-z]/.test(password) && /[A-Z]/.test(password),
+        number: /\d/.test(password),
+        symbol: /[^A-Za-z0-9]/.test(password)
+    };
+
+    if (!password) {
+        return {
+            checks: checks,
+            score: 0,
+            level: "empty",
+            label: "Waiting"
+        };
+    }
+
+    const passedCount = Object.values(checks).filter(Boolean).length;
+    const hasBonusLength = password.length >= 12;
+    const score = Math.min(4, passedCount + (hasBonusLength && passedCount >= 3 ? 1 : 0));
+
+    if (score <= 1) {
+        return { checks: checks, score: score, level: "weak", label: "Weak" };
+    }
+
+    if (score === 2) {
+        return { checks: checks, score: score, level: "fair", label: "Fair" };
+    }
+
+    if (score === 3) {
+        return { checks: checks, score: score, level: "good", label: "Good" };
+    }
+
+    return { checks: checks, score: score, level: "strong", label: "Strong" };
+}
+
+function updatePasswordStrengthUI() {
+    if (!passwordStrengthBadge) {
+        return;
+    }
+
+    const isLockMode = currentMode === "lock";
+
+    passwordStrengthBadge.hidden = !isLockMode;
+
+    if (!isLockMode) {
+        return;
+    }
+
+    const strength = evaluatePasswordStrength(passwordInput.value);
+
+    passwordStrengthBadge.dataset.strength = strength.level;
+    passwordStrengthBadge.textContent = strength.label;
+}
+
+function applyProtectionPreset(level) {
+    const isStrong = level === "strong";
+
+    permissionPrint.checked = !isStrong;
+    permissionCopy.checked = false;
+    permissionModify.checked = false;
+    permissionAnnotate.checked = !isStrong;
+    protectionHint.textContent = isStrong
+        ? "Strong protection uses stronger encryption and stricter default restrictions."
+        : "Basic protection keeps the PDF easier to use while still adding password protection.";
+}
+
+function getProtectionSettings() {
+    const isStrong = protectionLevelSelect.value === "strong";
+
+    return {
+        label: isStrong ? "Strong protection" : "Basic protection",
+        algorithm: isStrong ? "AES-256" : "AES-128"
+    };
+}
+
+function generateOwnerPassword() {
+    const randomPart = Math.random().toString(36).slice(2);
+    const timePart = Date.now().toString(36);
+    return "securedaddy-owner-" + timePart + "-" + randomPart;
+}
+
+function getLockIdleMessage() {
+    return currentMode === "lock"
+        ? "Mode selected: LOCK. Choose a PDF and enter the password you want to apply."
+        : "Mode selected: UNLOCK. Choose a protected PDF and enter the password used to protect it.";
+}
+
+function toggleLockProcessing(isProcessing) {
+    lockBox.querySelectorAll("input, button, select").forEach(control => {
+        control.disabled = isProcessing;
+    });
+
+    processButton.textContent = isProcessing
+        ? currentMode === "lock"
+            ? "Protecting..."
+            : "Unlocking..."
+        : currentMode === "lock"
+            ? "Protect PDF"
+            : "Unlock PDF";
+}
+
+async function getPdfRuntime() {
+    if (!pdfRuntimePromise) {
+        pdfRuntimePromise = (async () => {
+            const sources = [
+                "https://cdn.jsdelivr.net/npm/@libpdf/core@0.3.3/+esm",
+                "https://esm.sh/@libpdf/core@0.3.3"
+            ];
+            let lastError;
+
+            for (const source of sources) {
+                try {
+                    return await import(source);
+                } catch (error) {
+                    lastError = error;
+                }
+            }
+
+            throw lastError || new Error("Unable to load the PDF protection engine.");
+        })();
+    }
+
+    return pdfRuntimePromise;
+}
+
+async function loadPdfForUnlock(PDF, fileBytes, password) {
+    const attempts = [
+        () => PDF.load(fileBytes, { credentials: password }),
+        () => PDF.load(fileBytes, { password: password }),
+        () => PDF.load(fileBytes)
+    ];
+    let lastError;
+
+    for (const attempt of attempts) {
+        try {
+            return await attempt();
+        } catch (error) {
+            lastError = error;
+        }
+    }
+
+    throw lastError || new Error("Unable to open the protected PDF.");
+}
+
+function authenticatePdfForUnlock(pdf, password) {
+    const fallbackResult = {
+        authenticated: Boolean(pdf && pdf.isAuthenticated),
+        isOwner: Boolean(pdf && typeof pdf.hasOwnerAccess === "function" && pdf.hasOwnerAccess())
+    };
+
+    if (!pdf || typeof pdf.authenticate !== "function") {
+        return fallbackResult;
+    }
+
+    try {
+        const authResult = pdf.authenticate(password) || {};
+        return {
+            authenticated: Boolean(authResult.authenticated || fallbackResult.authenticated),
+            isOwner: Boolean(authResult.isOwner || (typeof pdf.hasOwnerAccess === "function" && pdf.hasOwnerAccess()))
+        };
+    } catch (error) {
+        return fallbackResult;
+    }
+}
+
+async function processFile() {
+    const file = lockFileInput.files[0];
+    const password = passwordInput.value.trim();
+    const isLockMode = currentMode === "lock";
+
+    if (!file && !password) {
+        setStatus(lockStatus, "Choose a PDF file and enter the required password information.", "error");
+        return;
+    }
+
+    if (!file) {
+        setStatus(lockStatus, "Choose a PDF file before processing.", "error");
+        return;
+    }
+
+    if (file.type !== "application/pdf") {
+        setStatus(lockStatus, "Only PDF files are supported in this tool.", "error");
+        return;
+    }
+
+    if (!password) {
+        setStatus(lockStatus, isLockMode ? "Enter a password before protecting the PDF." : "Enter the password before unlocking the PDF.", "error");
+        return;
+    }
+
+    if (isLockMode && password.length < 4) {
+        setStatus(lockStatus, "Use a password with at least 4 characters so the protected PDF is less fragile.", "error");
+        return;
+    }
+
+    try {
+        toggleLockProcessing(true);
+        setStatus(lockStatus, "Loading the PDF engine and processing your file locally...", "info");
+
+        const { PDF, PermissionDeniedError } = await getPdfRuntime();
+        const fileBytes = new Uint8Array(await file.arrayBuffer());
+
+        if (isLockMode) {
+            const pdf = await PDF.load(fileBytes);
+
+            if (pdf.isEncrypted && !pdf.isAuthenticated) {
+                setStatus(
+                    lockStatus,
+                    "This PDF is already protected. Unlock it first if you want to replace its current protection settings.",
+                    "error"
+                );
+                return;
+            }
+
+            const allowPrint = permissionPrint.checked;
+            const allowModify = permissionModify.checked;
+            const protectionSettings = getProtectionSettings();
+            const ownerPassword = generateOwnerPassword();
+
+            pdf.setProtection({
+                userPassword: password,
+                ownerPassword: ownerPassword,
+                algorithm: protectionSettings.algorithm,
+                permissions: {
+                    print: allowPrint,
+                    printHighQuality: allowPrint,
+                    copy: permissionCopy.checked,
+                    modify: allowModify,
+                    annotate: permissionAnnotate.checked,
+                    fillForms: true,
+                    accessibility: true,
+                    assemble: allowModify
+                }
+            });
+
+            const protectedBytes = await pdf.save();
+            const protectedBlob = new Blob([protectedBytes], { type: "application/pdf" });
+            downloadFile(protectedBlob, buildDownloadName(file.name, "locked"));
+            setStatus(
+                lockStatus,
+                protectionSettings.label + " applied successfully. Your secured copy has been downloaded.",
+                "success"
+            );
+            return;
+        }
+
+        const pdf = await loadPdfForUnlock(PDF, fileBytes, password);
+
+        if (!pdf.isEncrypted) {
+            setStatus(lockStatus, "This PDF is not currently protected, so there is nothing to unlock.", "info");
+            return;
+        }
+
+        const authResult = authenticatePdfForUnlock(pdf, password);
+
+        if (!authResult.authenticated) {
+            setStatus(lockStatus, "The password was not accepted. Enter the same password that was used when the PDF was protected.", "error");
+            return;
+        }
+
+        try {
+            pdf.removeProtection();
+        } catch (error) {
+            if (PermissionDeniedError && error instanceof PermissionDeniedError) {
+                setStatus(lockStatus, "Browser unlock hit PDF permission limits. Trying the reliable unlock fallback...", "info");
+                await unlockPdfWithBackend(file, password);
+                setStatus(lockStatus, "PDF unlocked successfully. Your unprotected copy has been downloaded.", "success");
+                return;
+            }
+
+            setStatus(lockStatus, "Browser unlock failed unexpectedly. Trying the reliable unlock fallback...", "info");
+            await unlockPdfWithBackend(file, password);
+            setStatus(lockStatus, "PDF unlocked successfully. Your unprotected copy has been downloaded.", "success");
+            return;
+        }
+
+        const unlockedBytes = await pdf.save();
+        const unlockedBlob = new Blob([unlockedBytes], { type: "application/pdf" });
+        downloadFile(unlockedBlob, buildDownloadName(file.name, "unlocked"));
+        setStatus(lockStatus, "PDF unlocked successfully. Your unprotected copy has been downloaded.", "success");
+    } catch (error) {
+        console.error("PDF processing error:", error);
+        const errorMessage = error && error.message
+            ? error.message
+            : "The PDF could not be processed. Confirm the file is valid and that you are using the correct password.";
+        setStatus(lockStatus, errorMessage, "error");
+    } finally {
+        toggleLockProcessing(false);
+    }
+}
+
+function buildDownloadName(filename, suffix) {
+    const dotIndex = filename.lastIndexOf(".");
+    const base = dotIndex > -1 ? filename.slice(0, dotIndex) : filename;
+    return base + "-" + suffix + ".pdf";
+}
+
+function downloadFile(blob, filename) {
+    const link = document.createElement("a");
+    const objectUrl = URL.createObjectURL(blob);
+
+    link.href = objectUrl;
+    link.download = filename;
+    link.click();
+
+    setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
+}
+
+async function unlockPdfWithBackend(file, password) {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("password", password);
+
+    const response = await fetch("/api/pdf/unlock", {
+        method: "POST",
+        body: formData
+    });
+
+    if (!response.ok) {
+        let errorMessage = "The server-side unlock fallback could not process this PDF.";
+
+        try {
+            const data = await response.json();
+            if (data && data.error) {
+                errorMessage = data.error;
+            }
+        } catch (error) {
+            // Ignore JSON parsing failures and use the fallback message.
+        }
+
+        throw new Error(errorMessage);
+    }
+
+    const unlockedBlob = await response.blob();
+    const contentDisposition = response.headers.get("Content-Disposition") || "";
+    const filenameMatch = contentDisposition.match(/filename=\"?([^\"]+)\"?/i);
+    const downloadName = filenameMatch ? filenameMatch[1] : buildDownloadName(file.name, "unlocked");
+
+    downloadFile(unlockedBlob, downloadName);
+}
+
+function setMode(mode) {
+    currentMode = mode;
+
+    lockModeButtons.forEach(button => {
+        button.classList.remove("active");
+        button.classList.toggle("primary-btn", button.dataset.mode === mode);
+        button.classList.toggle("secondary-btn", button.dataset.mode !== mode);
+        button.setAttribute("aria-pressed", button.dataset.mode === mode ? "true" : "false");
+    });
+
+    const activeButton = document.querySelector(".lock-mode-buttons button[data-mode='" + mode + "']");
+    activeButton.classList.add("active");
+
+    updateLockModeUI();
+    setStatus(lockStatus, getLockIdleMessage(), "info");
+}
+
+resetLockButton.addEventListener("click", resetLockTool);
+processButton.addEventListener("click", processFile);
+lockFileInput.addEventListener("change", updateLockSummary);
+passwordInput.addEventListener("input", updatePasswordStrengthUI);
+lockModeButtons.forEach(button => {
+    button.addEventListener("click", () => setMode(button.dataset.mode));
+});
+protectionLevelSelect.addEventListener("change", () => {
+    applyProtectionPreset(protectionLevelSelect.value);
+});
+
+applyProtectionPreset(protectionLevelSelect.value);
+updateLockSummary();
+updateLockModeUI();
+
+</script>
+</body>
+</html>

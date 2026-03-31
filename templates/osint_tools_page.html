@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Browse SecureDaddy OSINT and file intelligence tools in the updated interface system.">
+    <title>SecureDaddy | OSINT Tools</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@400;600;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='tool_interface.css') }}">
+</head>
+<body>
+    <header class="site-header">
+        <div class="brand-block">
+            <div class="brand-mark">SD</div>
+            <div class="brand-copy">
+                <p class="eyebrow">Investigation Hub</p>
+                <h1 class="brand-title">SecureDaddy</h1>
+                <p class="brand-subtitle">Open source intelligence and file analysis tools</p>
+            </div>
+        </div>
+        <nav class="main-nav" aria-label="Primary">
+            <a href="/">Home</a>
+            <a href="/osint" class="active">OSINT Tools</a>
+            <a href="/pdftool">PDF Tool</a>
+            <a href="/metadata">Metadata</a>
+            <button class="theme-toggle" id="themeToggle" type="button" aria-pressed="false" aria-label="Switch theme">
+                <span class="theme-toggle-track" aria-hidden="true">
+                    <span class="theme-toggle-icon theme-toggle-icon-moon"></span>
+                    <span class="theme-toggle-icon theme-toggle-icon-sun"></span>
+                    <span class="theme-toggle-thumb"></span>
+                </span>
+                <span class="theme-toggle-text" id="themeToggleText">Dark</span>
+            </button>
+        </nav>
+    </header>
+
+    <main class="page-shell">
+        <section class="hero-grid">
+            <div class="hero-copy-block">
+                <span class="section-tag">SecureDaddy Toolkit</span>
+                <h1>One interface for every investigation workflow.</h1>
+                <p class="lead">
+                    The OSINT hub now follows the same premium visual system as <code>pdf-tool.html</code>, so the directory page
+                    and individual tools feel like one connected platform.
+                </p>
+                <div class="hero-pills">
+                    <span>OSINT lookups</span>
+                    <span>File analysis</span>
+                    <span>Consistent navigation</span>
+                </div>
+            </div>
+            <div class="metric-card">
+                <strong>Tool Directory</strong>
+                <span>
+                    Launch reconnaissance tools, metadata analysis, and file protection workflows from a single dashboard
+                    without switching to a different UI style each time.
+                </span>
+                <div class="stats-row">
+                    <span class="badge">Investigation-ready</span>
+                    <span class="badge">Modern visual system</span>
+                    <span class="badge">Expandable grid</span>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-heading">
+            <h2>Available Tools</h2>
+            <p>Live tools link directly into the working routes. Placeholder items stay visible so the roadmap still feels intentional.</p>
+        </div>
+
+        <section class="tools-grid">
+            <a href="/pdftool" class="tool-card">
+                <h3>PDF Protection</h3>
+                <p>Protect or unlock PDF documents with the flagship SecureDaddy interface.</p>
+                <div class="tool-card-footer">
+                    <span class="badge badge-accent">Live</span>
+                    <span>File utility</span>
+                </div>
+            </a>
+            <a href="/ip" class="tool-card">
+                <h3>IP Intelligence</h3>
+                <p>Review location, ISP, organization, and ASN details for public IP addresses.</p>
+                <div class="tool-card-footer">
+                    <span class="badge badge-accent">Live</span>
+                    <span>Network OSINT</span>
+                </div>
+            </a>
+            <a href="/whois" class="tool-card">
+                <h3>WHOIS Lookup</h3>
+                <p>Investigate domain registrar data, lifecycle dates, nameservers, and registrant fields.</p>
+                <div class="tool-card-footer">
+                    <span class="badge badge-accent">Live</span>
+                    <span>Domain OSINT</span>
+                </div>
+            </a>
+            <a href="/metadata" class="tool-card">
+                <h3>Metadata Extractor</h3>
+                <p>Preview images, inspect EXIF data, and export a report without leaving the browser.</p>
+                <div class="tool-card-footer">
+                    <span class="badge badge-accent">Live</span>
+                    <span>File forensics</span>
+                </div>
+            </a>
+            <article class="tool-card is-disabled">
+                <h3>Email Intelligence</h3>
+                <p>Planned workspace for investigating email exposure, headers, and footprint data.</p>
+                <div class="tool-card-footer">
+                    <span class="badge">Planned</span>
+                    <span>Coming soon</span>
+                </div>
+            </article>
+            <article class="tool-card is-disabled">
+                <h3>Metadata Remover</h3>
+                <p>Reserved for a future cleanup workflow that strips hidden file metadata before sharing.</p>
+                <div class="tool-card-footer">
+                    <span class="badge">Planned</span>
+                    <span>Coming soon</span>
+                </div>
+            </article>
+            <article class="tool-card is-disabled">
+                <h3>Subdomain Finder</h3>
+                <p>Roadmap slot for discovering exposed sub-assets tied to a target domain.</p>
+                <div class="tool-card-footer">
+                    <span class="badge">Planned</span>
+                    <span>Coming soon</span>
+                </div>
+            </article>
+            <article class="tool-card is-disabled">
+                <h3>Hash Lookup</h3>
+                <p>Planned integration point for checking indicators and known malicious hashes.</p>
+                <div class="tool-card-footer">
+                    <span class="badge">Planned</span>
+                    <span>Coming soon</span>
+                </div>
+            </article>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <p>SecureDaddy now presents the OSINT hub with the same visual language as the PDF workflow.</p>
+        <p><a href="/">Return to homepage</a></p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='tool_interface.js') }}"></script>
+</body>
+</html>
