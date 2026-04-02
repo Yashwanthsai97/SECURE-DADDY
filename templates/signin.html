@@ -19,6 +19,7 @@
             --success: #8fe0b3;
             --danger: #ff9c9c;
             --shadow: 0 30px 70px rgba(0, 0, 0, 0.26);
+            --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
         }
 
         * {
@@ -95,6 +96,39 @@
         .pill {
             font-size: 15px;
             font-weight: 700;
+        }
+
+        .links a {
+            position: relative;
+            color: rgba(242, 242, 242, 0.86);
+            transition: color 0.35s var(--ease-smooth), transform 0.35s var(--ease-smooth);
+        }
+
+        .links a::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -8px;
+            width: 100%;
+            height: 2px;
+            border-radius: 999px;
+            transform: scaleX(0);
+            transform-origin: left;
+            background: linear-gradient(90deg, var(--accent), #fff0cb);
+            transition: transform 0.4s var(--ease-smooth);
+        }
+
+        .links a:hover,
+        .links a:focus-visible,
+        .links a.active {
+            color: #fff;
+            transform: translateY(-1px);
+        }
+
+        .links a:hover::after,
+        .links a:focus-visible::after,
+        .links a.active::after {
+            transform: scaleX(1);
         }
 
         .pill {
