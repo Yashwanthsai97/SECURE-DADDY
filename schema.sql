@@ -1,48 +1,3 @@
-# SecureDaddy
-
-## MySQL setup
-
-1. Create a `.env` file in the project root with:
-
-```env
-MYSQL_HOST=localhost
-MYSQL_PORT=3306
-MYSQL_USER=root
-MYSQL_PASSWORD=your_mysql_password
-MYSQL_DATABASE=secure_daddy
-```
-
-2. Install dependencies:
-
-```powershell
-.\.venv\Scripts\pip install -r requirements.txt
-```
-
-3. Start MySQL and run the app:
-
-```powershell
-.\.venv\Scripts\python app.py
-```
-
-The application will automatically create the `secure_daddy` database and the `users` table on startup.
-
-## One-time migration from `users.json`
-
-If you want to import existing JSON users into MySQL first, run:
-
-```powershell
-.\.venv\Scripts\python scripts\migrate_users_json_to_mysql.py
-```
-
-Migrated accounts keep their existing password hash temporarily and are upgraded to bcrypt automatically after the next successful login.
-
-## SQL to create the table manually
-
-```sql
-CREATE DATABASE IF NOT EXISTS secure_daddy CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
-USE secure_daddy;
-
 CREATE TABLE IF NOT EXISTS users (
     id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(255) NOT NULL UNIQUE,
@@ -68,5 +23,4 @@ CREATE TABLE IF NOT EXISTS users (
     show_activity_on_profile TINYINT(1) NOT NULL DEFAULT 1,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     last_login_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP
-);
-```
+)
