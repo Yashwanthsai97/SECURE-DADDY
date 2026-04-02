@@ -340,12 +340,10 @@ main{
 
 .video-box{
     position:relative;
-    padding:16px;
-    border-radius:32px;
+    border-radius:22px;
     background:
         linear-gradient(160deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02)),
         rgba(255,255,255,0.04);
-    border:1px solid rgba(255,255,255,0.08);
     backdrop-filter:blur(14px);
     box-shadow:0 28px 70px rgba(0,0,0,0.22);
     transition:transform 0.55s var(--ease-smooth), box-shadow 0.55s var(--ease-smooth);
