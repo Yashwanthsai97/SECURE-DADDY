@@ -119,6 +119,7 @@ h1,h2,h3{
 nav{
     display:flex;
     align-items:center;
+    flex-wrap:wrap;
     gap:2.3rem;
 }
 
@@ -586,13 +587,45 @@ footer{
         padding:14px 14px 34px;
     }
 
+    .site-header{
+        gap:18px;
+        padding:16px 18px;
+    }
+
+    nav{
+        width:100%;
+        flex-direction:column;
+        align-items:stretch;
+        gap:0.9rem;
+    }
+
+    nav a{
+        width:100%;
+    }
+
     .cyber{
         width:210px;
         height:44px;
     }
 
+    .hero-text{
+        padding:0;
+    }
+
+    .hero-text h1{
+        font-size:clamp(2.3rem, 12vw, 3.2rem);
+    }
+
     .hero-text p{
         font-size:16px;
+    }
+
+    .hero-actions,
+    .cta-actions,
+    .contact-actions{
+        flex-direction:column;
+        align-items:stretch;
+        width:100%;
     }
 
     .btn-signing,
@@ -600,9 +633,28 @@ footer{
         width:100%;
     }
 
-    .hero-actions,
-    .cta-actions,
-    .contact-actions{
-        width:100%;
+    .features,
+    .how,
+    .cta,
+    .contact-teaser{
+        padding:24px 18px;
+        border-radius:26px;
+    }
+
+    .card,
+    .step,
+    .highlight-card,
+    .video-box,
+    .video-box video{
+        border-radius:22px;
+    }
+
+    .highlight-card strong{
+        font-size:clamp(1.5rem, 8vw, 2rem);
+        overflow-wrap:anywhere;
+    }
+
+    .profile-chip{
+        max-width:none;
     }
 }

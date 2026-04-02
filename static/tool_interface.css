@@ -615,6 +615,10 @@ pre.text-output {
         padding: 16px;
     }
 
+    .page-shell {
+        padding: 36px var(--shell-gutter) 56px;
+    }
+
     .brand-logo {
         width: 210px;
         height: 44px;
@@ -640,8 +644,62 @@ pre.text-output {
         padding: 22px;
     }
 
+    .site-footer {
+        padding: 20px;
+    }
+
+    .tool-card-footer {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
     .data-row {
         grid-template-columns: 1fr;
         gap: 4px;
+    }
+}
+
+@media (max-width: 560px) {
+    :root {
+        --shell-gutter: 14px;
+    }
+
+    .site-header {
+        border-radius: 26px;
+    }
+
+    .page-shell {
+        padding: 32px var(--shell-gutter) 48px;
+    }
+
+    .hero-copy-block h1 {
+        font-size: clamp(2rem, 11vw, 2.7rem);
+    }
+
+    .hero-pills span,
+    .badge {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .hero-copy-block,
+    .metric-card,
+    .panel,
+    .tool-card,
+    .data-card,
+    .site-footer {
+        padding: 20px;
+        border-radius: 22px;
+    }
+
+    .preview-image-wrap {
+        min-height: 200px;
+        padding: 14px;
+    }
+
+    .file-input::file-selector-button {
+        display: block;
+        width: 100%;
+        margin: 0 0 12px;
     }
 }
