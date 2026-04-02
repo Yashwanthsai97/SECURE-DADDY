@@ -56,10 +56,10 @@
         }
 
         .topbar {
-            display: flex;
-            justify-content: space-between;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
             align-items: center;
-            gap: 20px;
+            gap: 24px;
             margin-bottom: 28px;
             padding: 18px 24px;
             border-radius: 999px;
@@ -71,6 +71,7 @@
         .brand {
             display: inline-flex;
             align-items: center;
+            justify-self: start;
         }
 
         .brand img {
@@ -86,17 +87,18 @@
             flex-wrap: wrap;
             align-items: center;
             gap: 18px;
+            justify-self: center;
         }
 
         .links a,
         .links button,
         .pill {
-            font-size: 14px;
-            font-weight: 600;
+            font-size: 15px;
+            font-weight: 700;
         }
 
         .pill {
-            max-width: 260px;
+            max-width: 700px;
             padding: 10px 16px;
             border-radius: 999px;
             color: #1c1710;
@@ -104,6 +106,7 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            justify-self: end;
         }
 
         .auth-shell {
@@ -665,7 +668,7 @@
             }
 
             .topbar {
-                flex-direction: column;
+                grid-template-columns: 1fr;
                 align-items: flex-start;
                 padding: 16px 18px;
             }
@@ -735,11 +738,10 @@
             </a>
             <nav class="links">
                 <a href="{{ url_for('home') }}">Home</a>
-                <a href="{{ url_for('osint_page') }}">Tools</a>
-                {% if current_user %}
-                <span class="pill">{{ current_user.name }}</span>
-                {% endif %}
             </nav>
+            {% if current_user %}
+            <span class="pill">{{ current_user.name }}</span>
+            {% endif %}
         </header>
 
         {% if current_user %}
