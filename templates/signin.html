@@ -227,55 +227,208 @@
             margin-top: 6px;
         }
 
-        .social-link-card {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            padding: 14px 16px;
-            border-radius: 18px;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+        .link-hidden-fields {
+            display: none;
         }
 
-        .social-link-card.is-empty {
-            opacity: 0.55;
+        .link-platform-grid {
+            display: grid;
+            gap: 14px;
+        }
+
+        .link-platform-btn {
+            position: relative;
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            width: 100%;
+            padding: 16px 62px 16px 18px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 22px;
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--text);
+            text-align: left;
+            cursor: pointer;
+            transition: border-color 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+        }
+
+        .link-platform-btn:hover,
+        .link-platform-btn:focus-visible {
+            transform: translateY(-2px);
+            border-color: rgba(255, 157, 0, 0.28);
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: 0 16px 28px rgba(0, 0, 0, 0.18);
+        }
+
+        .link-platform-btn::after {
+            content: "\25BE";
+            position: absolute;
+            top: 50%;
+            right: 18px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 34px;
+            height: 34px;
+            margin-top: -17px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text);
+            font-size: 16px;
+            transition: transform 0.25s ease, background-color 0.25s ease;
+        }
+
+        .link-platform-btn.is-open,
+        .link-platform-btn.is-active {
+            border-color: rgba(255, 157, 0, 0.5);
+            border-radius: 22px 22px 0 0;
+            background: rgba(255, 157, 0, 0.08);
+            box-shadow: 0 16px 30px rgba(255, 157, 0, 0.12);
+        }
+
+        .link-platform-btn.is-open::after,
+        .link-platform-btn.is-active::after {
+            transform: rotate(180deg);
+            background: rgba(255, 157, 0, 0.14);
+        }
+
+        .link-platform-copy {
+            display: grid;
+            gap: 8px;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .link-platform-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .link-platform-copy strong {
+            font-size: 14px;
+        }
+
+        .link-platform-state {
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.4;
+        }
+
+        .link-platform-btn.has-value .link-platform-state {
+            color: #ffd18a;
+        }
+
+        .link-platform-value {
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.55;
+            overflow-wrap: anywhere;
+        }
+
+        .link-platform-btn.has-value .link-platform-value {
+            color: var(--text);
+        }
+
+        .link-editor-card {
+            display: none;
+            gap: 14px;
+            margin-top: -10px;
+            padding: 18px;
+            border-radius: 0 0 22px 22px;
+            background: rgba(255, 157, 0, 0.07);
+            border: 1px solid rgba(255, 157, 0, 0.22);
+            border-top: none;
+        }
+
+        .link-editor-card.is-visible {
+            display: grid;
+        }
+
+        .link-editor-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 16px;
+        }
+
+        .link-editor-copy {
+            display: grid;
+            gap: 6px;
+        }
+
+        .link-editor-copy h4 {
+            font-size: 18px;
+        }
+
+        .link-editor-status {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 36px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            color: var(--muted);
+            background: rgba(255, 255, 255, 0.05);
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .link-editor-status.is-filled {
+            color: #ffd18a;
+            background: rgba(255, 157, 0, 0.12);
         }
 
         .social-link-icon {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 40px;
-            height: 40px;
+            width: 46px;
+            height: 46px;
             flex-shrink: 0;
-            border-radius: 12px;
-            background: rgba(255, 179, 71, 0.14);
-            color: #ffd18a;
-            font-size: 13px;
-            font-weight: 800;
-            letter-spacing: 0.02em;
+            border-radius: 14px;
+            color: #f7f7f7;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
         }
 
-        .social-link-body {
-            min-width: 0;
-            display: grid;
-            gap: 3px;
+        .social-link-icon svg {
+            width: 20px;
+            height: 20px;
+            display: block;
         }
 
-        .social-link-body strong,
-        .social-link-body span {
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
+        .social-link-icon.website {
+            background: linear-gradient(135deg, rgba(255, 183, 77, 0.24), rgba(255, 157, 0, 0.16));
+            color: #ffe2aa;
         }
 
-        .social-link-body strong {
-            font-size: 14px;
+        .social-link-icon.linkedin {
+            background: linear-gradient(135deg, rgba(10, 102, 194, 0.3), rgba(10, 102, 194, 0.18));
         }
 
-        .social-link-body span {
-            color: var(--muted);
-            font-size: 13px;
+        .social-link-icon.facebook {
+            background: linear-gradient(135deg, rgba(24, 119, 242, 0.3), rgba(24, 119, 242, 0.18));
+        }
+
+        .social-link-icon.instagram {
+            background: linear-gradient(135deg, rgba(245, 96, 64, 0.28), rgba(131, 58, 180, 0.24));
+        }
+
+        .social-link-icon.x {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.08));
+        }
+
+        .social-link-icon.youtube {
+            background: linear-gradient(135deg, rgba(255, 0, 0, 0.3), rgba(255, 0, 0, 0.18));
+        }
+
+        .social-link-icon.tiktok {
+            background: linear-gradient(135deg, rgba(37, 244, 238, 0.2), rgba(254, 44, 85, 0.24));
         }
 
         .actions {
@@ -532,6 +685,116 @@
             letter-spacing: 0.08em;
         }
 
+        .profile-hero-card {
+            display: grid;
+            gap: 18px;
+            margin-bottom: 20px;
+            padding: 24px;
+            border-radius: 24px;
+            background:
+                linear-gradient(145deg, rgba(255, 157, 0, 0.08), rgba(255, 255, 255, 0.03)),
+                var(--panel-soft);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .profile-hero-copy h2 {
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .profile-hero-metrics {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .profile-metric-card {
+            padding: 18px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .profile-metric-card span {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--muted);
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .profile-metric-card strong {
+            display: block;
+            font-size: 15px;
+            line-height: 1.5;
+            overflow-wrap: anywhere;
+        }
+
+        .profile-section-stack {
+            display: grid;
+            gap: 18px;
+        }
+
+        .profile-section-card {
+            display: grid;
+            gap: 18px;
+            padding: 24px;
+            border-radius: 24px;
+            background: var(--panel-soft);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .section-title-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 16px;
+        }
+
+        .section-title-row h3 {
+            margin-bottom: 8px;
+            font-size: 18px;
+        }
+
+        .section-chip {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 38px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            color: #ffd18a;
+            background: rgba(255, 157, 0, 0.12);
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            white-space: nowrap;
+        }
+
+        .profile-section-card .profile-grid,
+        .profile-section-card .social-grid {
+            gap: 14px;
+        }
+
+        .profile-section-card .field-group {
+            padding: 18px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .profile-section-card input,
+        .profile-section-card textarea {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .profile-textarea-field textarea {
+            min-height: 170px;
+        }
+
         .preview-card {
             display: grid;
             gap: 16px;
@@ -653,12 +916,19 @@
                 grid-template-columns: 1fr;
             }
 
+            .profile-hero-metrics {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
             .sidebar {
                 position: static;
             }
 
-            .panel-top {
+            .panel-top,
+            .section-title-row,
+            .link-editor-head {
                 flex-direction: column;
+                align-items: flex-start;
             }
         }
 
@@ -711,6 +981,21 @@
             .settings-panel {
                 padding: 20px;
                 border-radius: 24px;
+            }
+
+            .profile-hero-card,
+            .profile-section-card {
+                padding: 20px;
+                border-radius: 22px;
+            }
+
+            .profile-hero-metrics,
+            .link-platform-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-section-card .field-group {
+                padding: 16px;
             }
 
             .avatar-frame {
@@ -802,132 +1087,234 @@
                 <form id="profile-form">
                     <input type="hidden" id="profile-picture-value" name="profile_picture" value="{{ current_user.profile_picture }}">
                     <div class="tab-panel active" data-panel="profile">
-                        <div class="panel-top">
-                            <div>
+                        <div class="profile-hero-card">
+                            <div class="profile-hero-copy">
                                 <div class="eyebrow">Profile Settings</div>
                                 <h2>Update your public profile</h2>
-                                <p class="panel-copy">Keep your operator profile complete with clear identity details, readable timestamps, and the social links you want visible.</p>
+                                <p class="panel-copy">Keep your operator profile complete with clear identity details, readable timestamps, and the public links you want visible.</p>
                             </div>
-                            <div class="panel-badge">Local time: <span id="current-local-time">Loading...</span></div>
-                        </div>
 
-                        <div class="profile-grid">
-                            <div class="field-group">
-                                <label for="profile-name">Full Name</label>
-                                <input id="profile-name" name="name" type="text" value="{{ current_user.name }}" required>
-                            </div>
-                            <div class="field-group">
-                                <label for="profile-role">Role</label>
-                                <input id="profile-role" name="role" type="text" value="{{ current_user.role }}" placeholder="Security Analyst">
-                            </div>
-                            <div class="field-group">
-                                <label for="profile-headline">Headline</label>
-                                <input id="profile-headline" name="headline" type="text" value="{{ current_user.headline }}" maxlength="80" placeholder="Brief summary for your profile">
-                            </div>
-                            <div class="field-group">
-                                <label for="profile-company">Company / Team</label>
-                                <input id="profile-company" name="company" type="text" value="{{ current_user.company }}" placeholder="Independent Research">
-                            </div>
-                            <div class="field-group">
-                                <label for="profile-location">Location</label>
-                                <input id="profile-location" name="location" type="text" value="{{ current_user.location }}" placeholder="Hyderabad, India">
-                            </div>
-                            <div class="field-group">
-                                <label for="profile-focus">Focus Area</label>
-                                <input id="profile-focus" name="focus_area" type="text" value="{{ current_user.focus_area }}" placeholder="Threat Hunting">
+                            <div class="profile-hero-metrics">
+                                <div class="profile-metric-card">
+                                    <span>Local time</span>
+                                    <strong id="current-local-time">Loading...</strong>
+                                </div>
+                                <div class="profile-metric-card">
+                                    <span>Completion</span>
+                                    <strong id="profile-completion-inline">{{ completion_score }}%</strong>
+                                </div>
+                                <div class="profile-metric-card">
+                                    <span>Primary email</span>
+                                    <strong>{{ current_user.email }}</strong>
+                                </div>
+                                <div class="profile-metric-card">
+                                    <span>Last login</span>
+                                    <strong>{{ current_user.last_login_at_display }}</strong>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="field-group">
-                            <label for="profile-bio">Biography</label>
-                            <textarea id="profile-bio" name="bio" placeholder="Tell users what kind of security work you do and what you care about.">{{ current_user.bio }}</textarea>
-                            <p class="helper">Write a short, clear profile summary. Good bios are specific, readable, and feel human.</p>
-                        </div>
+                        <div class="profile-section-stack">
+                            <section class="profile-section-card">
+                                <div class="section-title-row">
+                                    <div>
+                                        <h3>Identity</h3>
+                                        <p class="helper">Name, role, team, and focus details that define how your profile appears across the SecureDaddy workspace.</p>
+                                    </div>
+                                    <span class="section-chip">Core</span>
+                                </div>
 
-                        <div class="social-grid">
-                            <div class="field-group">
-                                <label for="profile-website">Website</label>
-                                <input id="profile-website" name="website" type="url" value="{{ current_user.website }}" placeholder="https://your-site.com">
-                            </div>
-                            <div class="field-group">
-                                <label for="profile-linkedin">LinkedIn</label>
-                                <input id="profile-linkedin" name="linkedin_url" type="url" value="{{ current_user.linkedin_url }}" placeholder="https://linkedin.com/in/username">
-                            </div>
-                            <div class="field-group">
-                                <label for="profile-facebook">Facebook</label>
-                                <input id="profile-facebook" name="facebook_url" type="url" value="{{ current_user.facebook_url }}" placeholder="https://facebook.com/username">
-                            </div>
-                            <div class="field-group">
-                                <label for="profile-instagram">Instagram</label>
-                                <input id="profile-instagram" name="instagram_url" type="url" value="{{ current_user.instagram_url }}" placeholder="https://instagram.com/username">
-                            </div>
-                            <div class="field-group">
-                                <label for="profile-x">X / Twitter</label>
-                                <input id="profile-x" name="x_url" type="url" value="{{ current_user.x_url }}" placeholder="https://x.com/username">
-                            </div>
-                            <div class="field-group">
-                                <label for="profile-youtube">YouTube</label>
-                                <input id="profile-youtube" name="youtube_url" type="url" value="{{ current_user.youtube_url }}" placeholder="https://youtube.com/@username">
-                            </div>
-                            <div class="field-group">
-                                <label for="profile-tiktok">TikTok</label>
-                                <input id="profile-tiktok" name="tiktok_url" type="url" value="{{ current_user.tiktok_url }}" placeholder="https://tiktok.com/@username">
-                            </div>
-                        </div>
+                                <div class="profile-grid">
+                                    <div class="field-group">
+                                        <label for="profile-name">Full Name</label>
+                                        <input id="profile-name" name="name" type="text" value="{{ current_user.name }}" required>
+                                    </div>
+                                    <div class="field-group">
+                                        <label for="profile-role">Role</label>
+                                        <input id="profile-role" name="role" type="text" value="{{ current_user.role }}" placeholder="Security Analyst">
+                                    </div>
+                                    <div class="field-group">
+                                        <label for="profile-headline">Headline</label>
+                                        <input id="profile-headline" name="headline" type="text" value="{{ current_user.headline }}" maxlength="80" placeholder="Brief summary for your profile">
+                                    </div>
+                                    <div class="field-group">
+                                        <label for="profile-company">Company / Team</label>
+                                        <input id="profile-company" name="company" type="text" value="{{ current_user.company }}" placeholder="Independent Research">
+                                    </div>
+                                    <div class="field-group">
+                                        <label for="profile-location">Location</label>
+                                        <input id="profile-location" name="location" type="text" value="{{ current_user.location }}" placeholder="Hyderabad, India">
+                                    </div>
+                                    <div class="field-group">
+                                        <label for="profile-focus">Focus Area</label>
+                                        <input id="profile-focus" name="focus_area" type="text" value="{{ current_user.focus_area }}" placeholder="Threat Hunting">
+                                    </div>
+                                </div>
+                            </section>
 
-                        <div class="field-group">
-                            <label>Saved Links</label>
-                            <div class="social-preview-grid" id="saved-links-grid">
-                                <a class="social-link-card{% if not current_user.website %} is-empty{% endif %}" id="saved-website-card" href="{{ current_user.website or '#' }}" target="_blank" rel="noreferrer">
-                                    <span class="social-link-icon">WWW</span>
-                                    <span class="social-link-body">
-                                        <strong>Website</strong>
-                                        <span id="saved-website-text">{{ current_user.website or 'No website added yet' }}</span>
-                                    </span>
-                                </a>
-                                <a class="social-link-card{% if not current_user.linkedin_url %} is-empty{% endif %}" id="saved-linkedin-card" href="{{ current_user.linkedin_url or '#' }}" target="_blank" rel="noreferrer">
-                                    <span class="social-link-icon">in</span>
-                                    <span class="social-link-body">
-                                        <strong>LinkedIn</strong>
-                                        <span id="saved-linkedin-text">{{ current_user.linkedin_url or 'No LinkedIn link added yet' }}</span>
-                                    </span>
-                                </a>
-                                <a class="social-link-card{% if not current_user.facebook_url %} is-empty{% endif %}" id="saved-facebook-card" href="{{ current_user.facebook_url or '#' }}" target="_blank" rel="noreferrer">
-                                    <span class="social-link-icon">f</span>
-                                    <span class="social-link-body">
-                                        <strong>Facebook</strong>
-                                        <span id="saved-facebook-text">{{ current_user.facebook_url or 'No Facebook link added yet' }}</span>
-                                    </span>
-                                </a>
-                                <a class="social-link-card{% if not current_user.instagram_url %} is-empty{% endif %}" id="saved-instagram-card" href="{{ current_user.instagram_url or '#' }}" target="_blank" rel="noreferrer">
-                                    <span class="social-link-icon">IG</span>
-                                    <span class="social-link-body">
-                                        <strong>Instagram</strong>
-                                        <span id="saved-instagram-text">{{ current_user.instagram_url or 'No Instagram link added yet' }}</span>
-                                    </span>
-                                </a>
-                                <a class="social-link-card{% if not current_user.x_url %} is-empty{% endif %}" id="saved-x-card" href="{{ current_user.x_url or '#' }}" target="_blank" rel="noreferrer">
-                                    <span class="social-link-icon">X</span>
-                                    <span class="social-link-body">
-                                        <strong>X / Twitter</strong>
-                                        <span id="saved-x-text">{{ current_user.x_url or 'No X link added yet' }}</span>
-                                    </span>
-                                </a>
-                                <a class="social-link-card{% if not current_user.youtube_url %} is-empty{% endif %}" id="saved-youtube-card" href="{{ current_user.youtube_url or '#' }}" target="_blank" rel="noreferrer">
-                                    <span class="social-link-icon">YT</span>
-                                    <span class="social-link-body">
-                                        <strong>YouTube</strong>
-                                        <span id="saved-youtube-text">{{ current_user.youtube_url or 'No YouTube link added yet' }}</span>
-                                    </span>
-                                </a>
-                                <a class="social-link-card{% if not current_user.tiktok_url %} is-empty{% endif %}" id="saved-tiktok-card" href="{{ current_user.tiktok_url or '#' }}" target="_blank" rel="noreferrer">
-                                    <span class="social-link-icon">TT</span>
-                                    <span class="social-link-body">
-                                        <strong>TikTok</strong>
-                                        <span id="saved-tiktok-text">{{ current_user.tiktok_url or 'No TikTok link added yet' }}</span>
-                                    </span>
-                                </a>
-                            </div>
+                            <section class="profile-section-card">
+                                <div class="section-title-row">
+                                    <div>
+                                        <h3>Biography</h3>
+                                        <p class="helper">Write a short description that explains what kind of security work you do and what visitors should understand first.</p>
+                                    </div>
+                                    <span class="section-chip">About</span>
+                                </div>
+
+                                <div class="field-group profile-textarea-field">
+                                    <label for="profile-bio">Biography</label>
+                                    <textarea id="profile-bio" name="bio" placeholder="Tell users what kind of security work you do and what you care about.">{{ current_user.bio }}</textarea>
+                                    <p class="helper">Good bios are specific, readable, and feel human instead of generic.</p>
+                                </div>
+                            </section>
+
+                            <section class="profile-section-card">
+                                <div class="section-title-row">
+                                    <div>
+                                        <h3>Public Links</h3>
+                                        <p class="helper">Click any platform card to add, update, or remove its saved link. Each card shows the current saved URL so everything is easier to scan in one place.</p>
+                                    </div>
+                                    <span class="section-chip">Links</span>
+                                </div>
+
+                                <div class="link-hidden-fields" aria-hidden="true">
+                                    <input id="profile-website" name="website" type="hidden" value="{{ current_user.website }}">
+                                    <input id="profile-linkedin" name="linkedin_url" type="hidden" value="{{ current_user.linkedin_url }}">
+                                    <input id="profile-facebook" name="facebook_url" type="hidden" value="{{ current_user.facebook_url }}">
+                                    <input id="profile-instagram" name="instagram_url" type="hidden" value="{{ current_user.instagram_url }}">
+                                    <input id="profile-x" name="x_url" type="hidden" value="{{ current_user.x_url }}">
+                                    <input id="profile-youtube" name="youtube_url" type="hidden" value="{{ current_user.youtube_url }}">
+                                    <input id="profile-tiktok" name="tiktok_url" type="hidden" value="{{ current_user.tiktok_url }}">
+                                </div>
+
+                                <div class="link-platform-grid" id="link-platform-grid">
+                                    <button class="link-platform-btn{% if current_user.website %} has-value{% endif %}" id="saved-website-card" type="button" data-link-target="profile-website" data-link-label="Website" data-link-description="Main portfolio or company site" data-link-placeholder="https://your-site.com">
+                                        <span class="social-link-icon website" aria-hidden="true">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                                <circle cx="12" cy="12" r="8"></circle>
+                                                <path d="M4 12h16"></path>
+                                                <path d="M12 4a13 13 0 0 1 0 16"></path>
+                                                <path d="M12 4a13 13 0 0 0 0 16"></path>
+                                            </svg>
+                                        </span>
+                                        <span class="link-platform-copy">
+                                            <span class="link-platform-header">
+                                                <strong>Website</strong>
+                                                <span class="link-platform-state">{% if current_user.website %}Link added{% else %}Add link{% endif %}</span>
+                                            </span>
+                                            <span class="link-platform-value" id="saved-website-text">{{ current_user.website or 'No website added yet' }}</span>
+                                        </span>
+                                    </button>
+                                    <button class="link-platform-btn{% if current_user.linkedin_url %} has-value{% endif %}" id="saved-linkedin-card" type="button" data-link-target="profile-linkedin" data-link-label="LinkedIn" data-link-description="Professional profile" data-link-placeholder="https://linkedin.com/in/username">
+                                        <span class="social-link-icon linkedin" aria-hidden="true">
+                                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M6.8 8.2a1.8 1.8 0 1 1 0-3.6 1.8 1.8 0 0 1 0 3.6Zm-1.5 2.1h3v9.1h-3Zm4.8 0h2.9v1.3h.1c.4-.8 1.4-1.6 2.9-1.6 3.1 0 3.7 2 3.7 4.7v4.7h-3V15c0-1-.1-2.3-1.4-2.3s-1.6 1.1-1.6 2.2v4.5h-3Z"></path>
+                                            </svg>
+                                        </span>
+                                        <span class="link-platform-copy">
+                                            <span class="link-platform-header">
+                                                <strong>LinkedIn</strong>
+                                                <span class="link-platform-state">{% if current_user.linkedin_url %}Link added{% else %}Add link{% endif %}</span>
+                                            </span>
+                                            <span class="link-platform-value" id="saved-linkedin-text">{{ current_user.linkedin_url or 'No LinkedIn link added yet' }}</span>
+                                        </span>
+                                    </button>
+                                    <button class="link-platform-btn{% if current_user.facebook_url %} has-value{% endif %}" id="saved-facebook-card" type="button" data-link-target="profile-facebook" data-link-label="Facebook" data-link-description="Public Facebook page or profile" data-link-placeholder="https://facebook.com/username">
+                                        <span class="social-link-icon facebook" aria-hidden="true">
+                                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M13.7 20v-7h2.4l.4-2.7h-2.8V8.6c0-.8.3-1.3 1.4-1.3h1.5V4.9c-.3 0-1.1-.1-2.1-.1-2.1 0-3.6 1.3-3.6 3.8v1.7H8.5V13h2.4v7Z"></path>
+                                            </svg>
+                                        </span>
+                                        <span class="link-platform-copy">
+                                            <span class="link-platform-header">
+                                                <strong>Facebook</strong>
+                                                <span class="link-platform-state">{% if current_user.facebook_url %}Link added{% else %}Add link{% endif %}</span>
+                                            </span>
+                                            <span class="link-platform-value" id="saved-facebook-text">{{ current_user.facebook_url or 'No Facebook link added yet' }}</span>
+                                        </span>
+                                    </button>
+                                    <button class="link-platform-btn{% if current_user.instagram_url %} has-value{% endif %}" id="saved-instagram-card" type="button" data-link-target="profile-instagram" data-link-label="Instagram" data-link-description="Visual profile or brand page" data-link-placeholder="https://instagram.com/username">
+                                        <span class="social-link-icon instagram" aria-hidden="true">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                                <rect x="4.5" y="4.5" width="15" height="15" rx="4"></rect>
+                                                <circle cx="12" cy="12" r="3.4"></circle>
+                                                <circle cx="16.8" cy="7.2" r="1"></circle>
+                                            </svg>
+                                        </span>
+                                        <span class="link-platform-copy">
+                                            <span class="link-platform-header">
+                                                <strong>Instagram</strong>
+                                                <span class="link-platform-state">{% if current_user.instagram_url %}Link added{% else %}Add link{% endif %}</span>
+                                            </span>
+                                            <span class="link-platform-value" id="saved-instagram-text">{{ current_user.instagram_url or 'No Instagram link added yet' }}</span>
+                                        </span>
+                                    </button>
+                                    <button class="link-platform-btn{% if current_user.x_url %} has-value{% endif %}" id="saved-x-card" type="button" data-link-target="profile-x" data-link-label="X / Twitter" data-link-description="Short updates and announcements" data-link-placeholder="https://x.com/username">
+                                        <span class="social-link-icon x" aria-hidden="true">
+                                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M6 5h3.1l3.3 4.5L16.2 5H19l-5.2 6.1L19.5 19h-3.1l-3.8-5.1L8.1 19H5.3l5.6-6.5Z"></path>
+                                            </svg>
+                                        </span>
+                                        <span class="link-platform-copy">
+                                            <span class="link-platform-header">
+                                                <strong>X / Twitter</strong>
+                                                <span class="link-platform-state">{% if current_user.x_url %}Link added{% else %}Add link{% endif %}</span>
+                                            </span>
+                                            <span class="link-platform-value" id="saved-x-text">{{ current_user.x_url or 'No X link added yet' }}</span>
+                                        </span>
+                                    </button>
+                                    <button class="link-platform-btn{% if current_user.youtube_url %} has-value{% endif %}" id="saved-youtube-card" type="button" data-link-target="profile-youtube" data-link-label="YouTube" data-link-description="Channel or long-form video profile" data-link-placeholder="https://youtube.com/@username">
+                                        <span class="social-link-icon youtube" aria-hidden="true">
+                                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M21 12c0 2.7-.3 4.1-.6 4.9-.2.5-.6.9-1.1 1.1-.8.3-2.2.6-7.3.6s-6.5-.3-7.3-.6c-.5-.2-.9-.6-1.1-1.1C3.3 16.1 3 14.7 3 12s.3-4.1.6-4.9c.2-.5.6-.9 1.1-1.1.8-.3 2.2-.6 7.3-.6s6.5.3 7.3.6c.5.2.9.6 1.1 1.1.3.8.6 2.2.6 4.9Zm-10-3.2v6.4l5.4-3.2Z"></path>
+                                            </svg>
+                                        </span>
+                                        <span class="link-platform-copy">
+                                            <span class="link-platform-header">
+                                                <strong>YouTube</strong>
+                                                <span class="link-platform-state">{% if current_user.youtube_url %}Link added{% else %}Add link{% endif %}</span>
+                                            </span>
+                                            <span class="link-platform-value" id="saved-youtube-text">{{ current_user.youtube_url or 'No YouTube link added yet' }}</span>
+                                        </span>
+                                    </button>
+                                    <button class="link-platform-btn{% if current_user.tiktok_url %} has-value{% endif %}" id="saved-tiktok-card" type="button" data-link-target="profile-tiktok" data-link-label="TikTok" data-link-description="Short-form content profile" data-link-placeholder="https://tiktok.com/@username">
+                                        <span class="social-link-icon tiktok" aria-hidden="true">
+                                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M14.4 5c.5 1.4 1.7 2.6 3.1 3v2.8a7.2 7.2 0 0 1-3.1-1.1v4.8c0 3.1-2.2 5.2-5.1 5.2-2.7 0-4.8-2-4.8-4.7s2.1-4.8 4.9-4.8c.3 0 .5 0 .8.1v2.9a2.7 2.7 0 0 0-.8-.1c-1.2 0-2.1.8-2.1 1.9s.8 1.9 2 1.9c1.1 0 2.1-.7 2.1-2.3V5Z"></path>
+                                            </svg>
+                                        </span>
+                                        <span class="link-platform-copy">
+                                            <span class="link-platform-header">
+                                                <strong>TikTok</strong>
+                                                <span class="link-platform-state">{% if current_user.tiktok_url %}Link added{% else %}Add link{% endif %}</span>
+                                            </span>
+                                            <span class="link-platform-value" id="saved-tiktok-text">{{ current_user.tiktok_url or 'No TikTok link added yet' }}</span>
+                                        </span>
+                                    </button>
+                                </div>
+
+                                <div class="link-editor-card" id="link-editor-card">
+                                    <div class="link-editor-head">
+                                        <div class="link-editor-copy">
+                                            <h4 id="link-editor-title">Website</h4>
+                                            <p class="helper" id="link-editor-description">Main portfolio or company site</p>
+                                        </div>
+                                        <span class="link-editor-status" id="link-editor-status">No link yet</span>
+                                    </div>
+
+                                    <div class="field-group">
+                                        <label for="link-editor-input">Selected platform link</label>
+                                        <input id="link-editor-input" type="url" placeholder="https://your-site.com">
+                                        <p class="helper">Click a platform card to open this editor, add or remove its full public URL, then save the profile when you are done.</p>
+                                    </div>
+
+                                    <div class="actions">
+                                        <button class="button primary" type="button" id="apply-link-button">Apply Link</button>
+                                        <button class="button ghost" type="button" id="clear-link-button">Remove Link</button>
+                                    </div>
+                                </div>
+
+                            </section>
                         </div>
                     </div>
 
@@ -1225,6 +1612,76 @@
             }
         }
 
+        const LINK_PLATFORM_CONFIG = [
+            {
+                fieldId: "profile-website",
+                field: "website",
+                label: "Website",
+                description: "Main portfolio or company site",
+                placeholder: "https://your-site.com"
+            },
+            {
+                fieldId: "profile-linkedin",
+                field: "linkedin_url",
+                label: "LinkedIn",
+                description: "Professional profile",
+                placeholder: "https://linkedin.com/in/username"
+            },
+            {
+                fieldId: "profile-facebook",
+                field: "facebook_url",
+                label: "Facebook",
+                description: "Public Facebook page or profile",
+                placeholder: "https://facebook.com/username"
+            },
+            {
+                fieldId: "profile-instagram",
+                field: "instagram_url",
+                label: "Instagram",
+                description: "Visual profile or brand page",
+                placeholder: "https://instagram.com/username"
+            },
+            {
+                fieldId: "profile-x",
+                field: "x_url",
+                label: "X / Twitter",
+                description: "Short updates and announcements",
+                placeholder: "https://x.com/username"
+            },
+            {
+                fieldId: "profile-youtube",
+                field: "youtube_url",
+                label: "YouTube",
+                description: "Channel or long-form video profile",
+                placeholder: "https://youtube.com/@username"
+            },
+            {
+                fieldId: "profile-tiktok",
+                field: "tiktok_url",
+                label: "TikTok",
+                description: "Short-form content profile",
+                placeholder: "https://tiktok.com/@username"
+            }
+        ];
+
+        let activeLinkFieldId = null;
+
+        function collectLinkValues() {
+            return {
+                website: document.getElementById("profile-website")?.value || "",
+                linkedin_url: document.getElementById("profile-linkedin")?.value || "",
+                facebook_url: document.getElementById("profile-facebook")?.value || "",
+                instagram_url: document.getElementById("profile-instagram")?.value || "",
+                x_url: document.getElementById("profile-x")?.value || "",
+                youtube_url: document.getElementById("profile-youtube")?.value || "",
+                tiktok_url: document.getElementById("profile-tiktok")?.value || ""
+            };
+        }
+
+        function getLinkPlatformConfig(fieldId) {
+            return LINK_PLATFORM_CONFIG.find(config => config.fieldId === fieldId) || LINK_PLATFORM_CONFIG[0];
+        }
+
         function renderSavedLinks(user) {
             const platforms = [
                 ["website", "Website", "saved-website-card", "saved-website-text"],
@@ -1246,17 +1703,100 @@
                 }
 
                 if (value) {
-                    card.href = value;
-                    card.classList.remove("is-empty");
+                    card.classList.add("has-value");
+                    card.dataset.currentUrl = value;
+                    card.title = value;
                     text.textContent = shortenLink(value);
                     text.title = value;
                 } else {
-                    card.href = "#";
-                    card.classList.add("is-empty");
+                    card.classList.remove("has-value");
+                    delete card.dataset.currentUrl;
+                    card.removeAttribute("title");
                     text.textContent = `No ${label} link added yet`;
                     text.removeAttribute("title");
                 }
             });
+        }
+
+        function refreshLinkPlatformButtons() {
+            const linkEditorCard = document.getElementById("link-editor-card");
+            const editorVisible = Boolean(linkEditorCard && linkEditorCard.classList.contains("is-visible"));
+
+            document.querySelectorAll(".link-platform-btn").forEach(button => {
+                const fieldId = button.dataset.linkTarget;
+                const input = document.getElementById(fieldId);
+                const hasValue = Boolean((input?.value || "").trim());
+                const state = button.querySelector(".link-platform-state");
+                const isOpen = editorVisible && fieldId === activeLinkFieldId;
+
+                button.classList.toggle("has-value", hasValue);
+                button.classList.toggle("is-active", isOpen);
+                button.classList.toggle("is-open", isOpen);
+
+                if (state) {
+                    state.textContent = hasValue ? "Link added" : "Add link";
+                }
+            });
+        }
+
+        function updateLinkEditor() {
+            if (!activeLinkFieldId) {
+                return;
+            }
+
+            const config = getLinkPlatformConfig(activeLinkFieldId);
+            const hiddenInput = document.getElementById(config.fieldId);
+            const currentValue = (hiddenInput?.value || "").trim();
+            const editorTitle = document.getElementById("link-editor-title");
+            const editorDescription = document.getElementById("link-editor-description");
+            const editorInput = document.getElementById("link-editor-input");
+            const editorStatus = document.getElementById("link-editor-status");
+            const applyButton = document.getElementById("apply-link-button");
+            const clearButton = document.getElementById("clear-link-button");
+
+            if (editorTitle) {
+                editorTitle.textContent = config.label;
+            }
+
+            if (editorDescription) {
+                editorDescription.textContent = config.description;
+            }
+
+            if (editorInput) {
+                editorInput.value = currentValue;
+                editorInput.placeholder = config.placeholder;
+            }
+
+            if (editorStatus) {
+                editorStatus.textContent = currentValue ? "Link added" : "No link yet";
+                editorStatus.classList.toggle("is-filled", Boolean(currentValue));
+            }
+
+            if (applyButton) {
+                applyButton.textContent = currentValue ? "Update Link" : "Apply Link";
+            }
+
+            if (clearButton) {
+                clearButton.disabled = !currentValue;
+            }
+        }
+
+        function commitActiveLinkValue(nextValue) {
+            if (!activeLinkFieldId) {
+                return;
+            }
+
+            const config = getLinkPlatformConfig(activeLinkFieldId);
+            const hiddenInput = document.getElementById(config.fieldId);
+
+            if (!hiddenInput) {
+                return;
+            }
+
+            hiddenInput.value = (nextValue || "").trim();
+            renderSavedLinks(collectLinkValues());
+            refreshLinkPlatformButtons();
+            updateLinkEditor();
         }
 
         function updateAvatarView(name, profilePicture) {
@@ -1306,6 +1846,7 @@
                 "sidebar-role": user.role,
                 "sidebar-headline": user.headline,
                 "completion-score": completionScore + "%",
+                "profile-completion-inline": completionScore + "%",
                 "quick-email": user.email,
                 "quick-location": user.location,
                 "created-at": formatProfileDate(user.created_at),
@@ -1319,8 +1860,17 @@
                 }
             });
 
+            LINK_PLATFORM_CONFIG.forEach(config => {
+                const input = document.getElementById(config.fieldId);
+                if (input) {
+                    input.value = user[config.field] || "";
+                }
+            });
+
             updateAvatarView(user.name, user.profile_picture);
             renderSavedLinks(user);
+            refreshLinkPlatformButtons();
+            updateLinkEditor();
         }
 
         document.querySelectorAll(".tab-button").forEach(button => {
@@ -1345,15 +1895,66 @@
             currentLocalTime.textContent = now;
         }
 
-        renderSavedLinks({
-            website: document.getElementById("profile-website")?.value || "",
-            linkedin_url: document.getElementById("profile-linkedin")?.value || "",
-            facebook_url: document.getElementById("profile-facebook")?.value || "",
-            instagram_url: document.getElementById("profile-instagram")?.value || "",
-            x_url: document.getElementById("profile-x")?.value || "",
-            youtube_url: document.getElementById("profile-youtube")?.value || "",
-            tiktok_url: document.getElementById("profile-tiktok")?.value || ""
-        });
+        renderSavedLinks(collectLinkValues());
+
+        const linkPlatformButtons = Array.from(document.querySelectorAll(".link-platform-btn"));
+        const linkEditorCard = document.getElementById("link-editor-card");
+        const linkEditorInput = document.getElementById("link-editor-input");
+        const applyLinkButton = document.getElementById("apply-link-button");
+        const clearLinkButton = document.getElementById("clear-link-button");
+
+        if (linkPlatformButtons.length && linkEditorInput && linkEditorCard) {
+            linkPlatformButtons.forEach(button => {
+                button.addEventListener("click", () => {
+                    const fieldId = button.dataset.linkTarget || LINK_PLATFORM_CONFIG[0].fieldId;
+                    const isSameOpen = linkEditorCard.classList.contains("is-visible") && activeLinkFieldId === fieldId;
+
+                    if (isSameOpen) {
+                        activeLinkFieldId = null;
+                        linkEditorCard.classList.remove("is-visible");
+                        refreshLinkPlatformButtons();
+                        return;
+                    }
+
+                    activeLinkFieldId = fieldId;
+                    button.insertAdjacentElement("afterend", linkEditorCard);
+                    linkEditorCard.classList.add("is-visible");
+                    refreshLinkPlatformButtons();
+                    updateLinkEditor();
+                    linkEditorInput.focus();
+                    linkEditorInput.select();
+                });
+            });
+
+            applyLinkButton?.addEventListener("click", () => {
+                if (!activeLinkFieldId) {
+                    return;
+                }
+
+                commitActiveLinkValue(linkEditorInput.value);
+                setStatus(getLinkPlatformConfig(activeLinkFieldId).label + " link updated. Save changes to keep it.", "success");
+            });
+
+            clearLinkButton?.addEventListener("click", () => {
+                if (!activeLinkFieldId) {
+                    return;
+                }
+
+                linkEditorInput.value = "";
+                commitActiveLinkValue("");
+                setStatus(getLinkPlatformConfig(activeLinkFieldId).label + " link removed. Save changes to keep it.", "success");
+            });
+
+            linkEditorInput.addEventListener("keydown", event => {
+                if (event.key === "Enter" && activeLinkFieldId) {
+                    event.preventDefault();
+                    commitActiveLinkValue(linkEditorInput.value);
+                    setStatus(getLinkPlatformConfig(activeLinkFieldId).label + " link updated. Save changes to keep it.", "success");
+                }
+            });
+
+            refreshLinkPlatformButtons();
+        }
 
         const pictureUpload = document.getElementById("picture-upload");
         if (pictureUpload) {
@@ -1448,15 +2049,9 @@
             }
 
             input.addEventListener("input", () => {
-                renderSavedLinks({
-                    website: document.getElementById("profile-website")?.value || "",
-                    linkedin_url: document.getElementById("profile-linkedin")?.value || "",
-                    facebook_url: document.getElementById("profile-facebook")?.value || "",
-                    instagram_url: document.getElementById("profile-instagram")?.value || "",
-                    x_url: document.getElementById("profile-x")?.value || "",
-                    youtube_url: document.getElementById("profile-youtube")?.value || "",
-                    tiktok_url: document.getElementById("profile-tiktok")?.value || ""
-                });
+                renderSavedLinks(collectLinkValues());
+                refreshLinkPlatformButtons();
+                updateLinkEditor();
             });
         });
 
