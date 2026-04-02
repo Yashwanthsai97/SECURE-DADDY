@@ -8,7 +8,7 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@400;600;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
 :root {
@@ -83,7 +83,7 @@ html {
 
 body {
     position: relative;
-    font-family: "Space Grotesk", Arial, sans-serif;
+    font-family: "Inter", Arial, sans-serif;
     color: var(--text);
     overflow-x: hidden;
     background: var(--page-background);
@@ -219,44 +219,46 @@ footer {
 
 .header {
     position: sticky;
-    top: 0;
-    z-index: 1000;
-    margin-right: 0%;
-    display: flex;
-    justify-content: space-between;
+    top: 18px;
+    z-index: 20;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
     align-items: center;
     gap: 24px;
-    margin-bottom: 50%;
-    width: 100%;
-    margin: 0px auto 0;
+    width: min(1400px, calc(100% - 48px));
+    margin: 18px auto 36px;
     padding: 18px 24px;
     box-shadow: 0 16px 40px rgba(0, 0, 0, 0.24);
-    background: var(--header-bg);
-    border-bottom: 1px solid var(--header-border);
-    backdrop-filter: blur(12px);
+    background: rgba(8, 8, 8, 0.72);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 999px;
+    backdrop-filter: blur(18px);
 }
 
 .header-actions {
     display: flex;
     align-items: center;
     gap: 18px;
-    margin-left: auto;
+    justify-self: center;
 }
 
 
 .logo-area {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 0;
     min-width: 0;
+    text-decoration: none;
 }
 
 .logo {
-    width: 56px;
+    width: 250px;
+    height: 50px;
     flex-shrink: 0;
-    transform: translateX(-28px);
-    opacity: 0;
-    animation: slideInLogo 1s ease forwards;
+    border-radius: 50px;
+    transform: none;
+    opacity: 1;
+    animation: none;
 }
 
 .eyebrow {
@@ -273,34 +275,84 @@ footer {
 .feature-band h2,
 .metadata-box h2,
 .lock-box h2 {
-    font-family: "Oxanium", sans-serif;
+    font-family: "Orbitron", sans-serif;
 }
 
 .logo-area h1 {
-    font-size: clamp(1.65rem, 3vw, 2.2rem);
-    letter-spacing: 0.04em;
+    display: none;
 }
 
 .main-nav {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    justify-content: flex-end;
+    justify-content: center;
     margin-left: 0;
     margin-right: 0;
-    gap: clamp(24px, 2.4vw, 34px);
+    gap: clamp(20px, 2vw, 30px);
 }
 
 .main-nav a {
-    color: var(--muted);
+    position: relative;
+    color: rgba(242, 242, 242, 0.86);
     text-decoration: none;
     font-size: 0.96rem;
-    transition: color 0.9s ease;
+    transition: color 0.35s ease, transform 0.35s ease;
+}
+
+.main-nav a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -8px;
+    width: 100%;
+    height: 2px;
+    border-radius: 999px;
+    transform: scaleX(0);
+    transform-origin: left;
+    background: linear-gradient(90deg, var(--accent), #fff0cb);
+    transition: transform 0.35s ease;
 }
 
 .main-nav a:hover,
-.main-nav a:focus-visible {
+.main-nav a:focus-visible,
+.main-nav a.active {
     color: var(--text);
+    transform: translateY(-1px);
+}
+
+.main-nav a:hover::after,
+.main-nav a:focus-visible::after,
+.main-nav a.active::after {
+    transform: scaleX(1);
+}
+
+.account-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    justify-self: end;
+    min-height: 50px;
+    padding: 12px 22px;
+    border-radius: 999px;
+    background: #f0f0f0;
+    color: #0f0f0f;
+    font-size: 0.98rem;
+    font-weight: 700;
+    box-shadow: 0 10px 26px rgba(255, 255, 255, 0.08);
+    transition:
+        transform 0.35s ease,
+        box-shadow 0.35s ease,
+        background-color 0.35s ease,
+        color 0.35s ease;
+}
+
+.account-link:hover,
+.account-link:focus-visible {
+    background: var(--accent);
+    color: #111;
+    transform: translateY(-2px);
+    box-shadow: 0 16px 34px rgba(255, 157, 0, 0.18);
 }
 
 .theme-toggle {
@@ -733,7 +785,7 @@ body[data-theme="light"] .theme-toggle-thumb::after {
 
 .hero-metric strong {
     display: block;
-    font-family: "Oxanium", sans-serif;
+    font-family: "Orbitron", sans-serif;
     font-size: 1.7rem;
     color: #fff3de;
     margin-bottom: 8px;
@@ -1347,7 +1399,7 @@ body[data-theme="light"] .password-strength-badge[data-strength="strong"] {
     border: 1px dashed var(--surface-border-strong);
     background: var(--surface-1);
     color: var(--heading-strong);
-    font-family: "Oxanium", sans-serif;
+    font-family: "Orbitron", sans-serif;
     font-size: 1.5rem;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -1706,21 +1758,24 @@ body[data-theme="light"] .password-strength-badge[data-strength="strong"] {
         width: calc(100% - 20px);
         margin-top: 10px;
         padding: 16px 18px;
-        flex-direction: column;
+        grid-template-columns: 1fr;
         align-items: flex-start;
     }
 
     .header-actions {
         width: 100%;
-        flex-wrap: wrap;
-        gap: 14px 16px;
+        justify-self: stretch;
     }
 
     .main-nav {
         width: 100%;
-        margin-right: 0;
         justify-content: flex-start;
         gap: 20px;
+    }
+
+    .account-link {
+        width: 100%;
+        justify-self: stretch;
     }
 
     .hero,
@@ -1893,30 +1948,16 @@ body[data-theme="light"] .password-strength-badge[data-strength="strong"] {
     <a class="skip-link" href="#mainContent">Skip to content</a>
 
     <header class="header">
-        <div class="logo-area">
-            <img src="logo2.png" class="logo" alt="SecureDaddy logo">
-            <div>
-                <h1>SecureDaddy</h1>
-            </div>
-        </div>
+        <a class="logo-area" href="{{ url_for('home') }}">
+            <img src="{{ url_for('static', filename='media/cyber.png') }}" class="logo" alt="SecureDaddy logo">
+        </a>
 
         <div class="header-actions">
             <nav class="main-nav" aria-label="Primary">
-                <a href="SD.html#hero">Home</a>
-                <a href="SD.html#services">Tools</a>
-                <a href="metadata-tool.html">Metadata Tool</a>
-                <a href="SD.html#contact">Contact</a>
+                <a href="{{ url_for('home') }}">Home</a>
             </nav>
-
-            <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to light mode" aria-pressed="false">
-                <span class="theme-toggle-track" aria-hidden="true">
-                    <span class="theme-toggle-icon theme-toggle-icon-moon"></span>
-                    <span class="theme-toggle-icon theme-toggle-icon-sun"></span>
-                    <span class="theme-toggle-thumb"></span>
-                </span>
-                <span class="theme-toggle-text" id="themeToggleText">Dark</span>
-            </button>
         </div>
+        <a class="account-link" href="{{ url_for('signin_page') }}">Account</a>
     </header>
 
     <main id="mainContent" class="tool-page-main">
@@ -2018,21 +2059,22 @@ body[data-theme="light"] .password-strength-badge[data-strength="strong"] {
 
             <div class="footer-links">
                 <h4>Navigate</h4>
-                <a href="SD.html#hero">Home</a>
-                <a href="SD.html#services">Main Tools</a>
-                <a href="SD.html#about">Why Us</a>
+                <a href="{{ url_for('home') }}">Home</a>
+                <a href="{{ url_for('home') }}#tools-section">Tools Section</a>
+                <a href="{{ url_for('home') }}#why-us">Why Us</a>
             </div>
 
             <div class="footer-links">
                 <h4>Tools</h4>
-                <a href="metadata-tool.html">Metadata Viewer</a>
-                <a href="pdf-tool.html">PDF Protection</a>
+                <a href="{{ url_for('osint_page') }}">OSINT Hub</a>
+                <a href="{{ url_for('metadata_page') }}">Metadata Viewer</a>
+                <a href="{{ url_for('pdf_tool_page') }}">PDF Protection</a>
             </div>
 
             <div class="footer-links">
                 <h4>Contact</h4>
-                <a href="mailto:support@securedaddy.com">support@securedaddy.com</a>
-                <a href="tel:+919000000000">+91 90000 00000</a>
+                <a href="mailto:support@securedaddy.local">support@securedaddy.local</a>
+                <a href="tel:+918045672200">+91 80 4567 2200</a>
                 <span>Client-side demo experience</span>
             </div>
         </div>
@@ -2046,33 +2088,15 @@ body[data-theme="light"] .password-strength-badge[data-strength="strong"] {
     const themeStorageKey = "securedaddy-theme";
 
     function getSystemTheme() {
-        if (window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches) {
-            return "light";
-        }
-
         return "dark";
     }
 
     function readSavedTheme() {
-        try {
-            const savedTheme = window.localStorage.getItem(themeStorageKey);
-
-            if (savedTheme === "light" || savedTheme === "dark") {
-                return savedTheme;
-            }
-        } catch (error) {
-            console.warn("Theme preference could not be read.", error);
-        }
-
         return null;
     }
 
     function writeSavedTheme(theme) {
-        try {
-            window.localStorage.setItem(themeStorageKey, theme);
-        } catch (error) {
-            console.warn("Theme preference could not be saved.", error);
-        }
+        return theme;
     }
 
     function applyTheme(theme) {

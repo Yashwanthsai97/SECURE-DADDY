@@ -3,24 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Secure Daddy</title>
-    <link rel="stylesheet" href="../static/main_page.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <title>SecureDaddy</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='main_page.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
-<body>
-    <div class="layer-blur"></div>
-        <header>
+<body id="top">
+    <div class="page-shell">
+        <header class="site-header">
             <div class="nav-logo-box">
-                <img class="cyber" src="../static/media/cyber.png" alt="cyber">
+                <img class="cyber" src="{{ url_for('static', filename='media/cyber.png') }}" alt="SecureDaddy logo">
             </div>
 
             <nav>
-                <a href="{{ url_for('home') }}">Home</a>
-                <a href="{{ url_for('osint_page') }}">Tools</a>
-                <a href="#">Why us?</a>
-                <a href="#">Contact</a>
-                
+                <a href="#top">Home</a>
+                <a href="#tools-section">Tools</a>
+                <a href="#why-us">Why us?</a>
+                <a href="#contact">Contact</a>
             </nav>
+
             {% if current_user %}
             <a class="btn-signing profile-chip" href="{{ url_for('signin_page') }}">
                 <span class="profile-chip-avatar">
@@ -38,101 +38,119 @@
             <a class="btn-signing" href="{{ url_for('signin_page') }}">SIGN IN</a>
             {% endif %}
         </header>
-        <!-- content Section -->
-            <div class="hero">
-                    <div class="hero-text">
-                        <h1>Secure Smarter<br>Detect Faster</h1>
-                        <p>Powerful cybersecurity tools built for modern defenders.<br>Protect systems, analyze threats, and stay ahead of attackers.</p>
-                        <a class="btn primary" href="{{ url_for('signin_page') }}">Get Started</a>
-                        <button class="btn secondary">Documentation</button>
+
+        <main>
+            <section class="hero section-shell">
+                <div class="hero-text reveal-delay-0">
+                    <div class="eyebrow">Cyber Defense Toolkit</div>
+                    <h1>Secure Smarter<br>Detect Faster</h1>
+                    <p>Powerful cybersecurity tools built for modern defenders. Protect systems, analyze threats, and stay ahead of attackers with a cleaner, faster workflow.</p>
+                    <div class="hero-actions">
+                        <a class="btn primary" href="#tools-section">Get Started</a>
+                        <a class="btn secondary" href="#contact">Contact Team</a>
                     </div>
-                <!-- video section -->
-                <div class="video-box">
+                </div>
+
+                <div class="video-box reveal-delay-1">
                     <video autoplay muted loop playsinline>
-                        <source src="../static/media/cybervideo1.mp4" type="video/mp4">
+                        <source src="{{ url_for('static', filename='media/cybervideo1.mp4') }}" type="video/mp4">
                     </video>
                 </div>
-            </div>
-        <!-- content section -->
-         <section class="features">
-            <div class="container">
-                <h2>Why Choose SecureDaddy?</h2>
-                <div class="grid">
-                    <div class="card">
-                        <h3>Vulnerability Scanner</h3>
-                        <p>Detect system weaknesses before attackers exploit them.</p>
+            </section>
+
+            <section class="features section-shell reveal-delay-1" id="tools-section">
+                <div class="container">
+                    <div class="section-heading">
+                        <div class="eyebrow">Tools Section</div>
+                        <h2>Focused tools, clear interfaces, quicker decisions.</h2>
                     </div>
 
-                    <!-- ✅ FIXED HERE -->
-                    <a href="/osint" class="card">
-                        <h3>OSINT Toolkit</h3>
-                        <p>Gather intelligence using powerful open-source tools.</p>
-                    </a>
+                    <div class="grid">
+                        <div class="card">
+                            <h3>Vulnerability Scanner</h3>
+                            <p>Detect system weaknesses before attackers exploit them and track the riskiest areas first.</p>
+                        </div>
 
-                    <div class="card">
-                        <h3>Threat Detection</h3>
-                        <p>Monitor suspicious activities in real time.</p>
+                        <a href="{{ url_for('osint_page') }}" class="card">
+                            <h3>OSINT Toolkit</h3>
+                            <p>Gather intelligence using streamlined lookups for IPs, domains, metadata, and future research modules.</p>
+                        </a>
+
+                        <div class="card">
+                            <h3>Threat Detection</h3>
+                            <p>Monitor suspicious activity patterns and organize signals into a practical response workflow.</p>
+                        </div>
+
+                        <div class="card">
+                            <h3>Encryption Utilities</h3>
+                            <p>Keep sensitive material safer with utility-driven protection paths built for everyday operational work.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="how section-shell reveal-delay-2" id="why-us">
+                <div class="container">
+                    <div class="section-heading">
+                        <div class="eyebrow">Why Us</div>
+                        <h2>Start quickly without losing visibility.</h2>
                     </div>
 
-                    <div class="card">
-                        <h3>Encryption Utilities</h3>
-                        <p>Secure sensitive data with strong cryptographic tools.</p>
+                    <div class="steps">
+                        <div class="step">
+                            <h3>1. Create Account</h3>
+                            <p>Open your workspace, save your preferred flows, and keep tool access organized.</p>
+                        </div>
+                        <div class="step">
+                            <h3>2. Choose Tools</h3>
+                            <p>Select the right intelligence or security utility for the job instead of hunting through clutter.</p>
+                        </div>
+                        <div class="step">
+                            <h3>3. Stay Protected</h3>
+                            <p>Move from lookup to action faster with a toolkit that is built around defensive work.</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </section>
-        <!-- Status Section -->
-         <section class="stats">
-            <div class="container stats-grid">
-                <div class="stat">
-                    <h2>50+</h2>
-                    <p>Security Tools</p>
-                </div>
-                <div class="stat">
-                    <h2>10K+</h2>
-                    <p>Users</p>
-                </div>
-                <div class="stat">
-                    <h2>99.9%</h2>
-                    <p>Uptime</p>
-                </div>
-                <div class="stat">
-                    <h2>24/7</h2>
-                    <p>Monitoring</p>
-                </div>
-            </div>
-        </section>
-        <!-- how it works -->
-         <section class="how">
-            <div class="container">
-                <h2>How It Works</h2>
-                <div class="steps">
-                    <div class="step">
-                        <h3>1. Create Account</h3>
-                        <p>Sign up and access your security dashboard.</p>
-                    </div>
-                    <div class="step">
-                        <h3>2. Choose Tools</h3>
-                        <p>Select from multiple cybersecurity utilities.</p>
-                    </div>
-                    <div class="step">
-                        <h3>3. Stay Protected</h3>
-                        <p>Monitor, detect, and secure your digital assets.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
+            </section>
 
-        <!-- cta section -->
-        <section class="cta">
-            <h2>Ready to Secure Your Systems?</h2>
-            <button class="btn secondary">Get Started Now</button>
-        </section>
-        <!-- footer -->
-         <footer>
-            © 2026 SecureDaddy. All Rights Reserved.
+            <section class="cta section-shell reveal-delay-3">
+                <h2>Ready to secure your systems?</h2>
+                <p>Launch the available toolkit or create your account before you start.</p>
+                <div class="cta-actions">
+                    <a class="btn primary" href="#tools-section">Get Started Now</a>
+                    <a class="btn secondary" href="{{ url_for('signin_page') }}">Create Account</a>
+                </div>
+            </section>
+
+            <section class="contact-teaser section-shell reveal-delay-3" id="contact">
+                <div class="contact-copy">
+                    <div class="eyebrow">Contact</div>
+                    <h2>Need help? Reach us directly from here.</h2>
+                    <p>For support, account questions, or onboarding help, use the contact details below. This keeps everything simple and in one place on the home page.</p>
+                    <div class="contact-actions">
+                        <a class="btn primary" href="mailto:support@securedaddy.local">Email Support</a>
+                        <a class="btn secondary" href="tel:+918045672200">Call Support</a>
+                    </div>
+                </div>
+
+                <div class="contact-highlight">
+                    <div class="highlight-card">
+                        <span class="highlight-label">Main Support</span>
+                        <strong>+91 80 4567 2200</strong>
+                        <p>For account help, product questions, and guided onboarding from 8:00 AM to 8:00 PM IST.</p>
+                    </div>
+                    <div class="highlight-card">
+                        <span class="highlight-label">Support Email</span>
+                        <strong>support@securedaddy.local</strong>
+                        <p>Share your issue, tool name, and expected help so we can respond faster.</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            &copy; 2026 SecureDaddy. All Rights Reserved.
         </footer>
-
-
+    </div>
 </body>
 </html>
