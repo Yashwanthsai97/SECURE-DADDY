@@ -1,9 +1,0 @@
-bcrypt
-Flask
-flask-cors
-mysql-connector-python
-PyPDF2
-python-dotenv
-python-whois
-requests
-Werkzeug
