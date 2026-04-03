@@ -1,5 +1,29 @@
 # SecureDaddy
 
+## Quick setup for friends
+
+After cloning, the easiest Windows setup is:
+
+```powershell
+.\setup.bat
+```
+
+This will:
+- create `.venv`
+- install Python packages
+- help create `.env`
+
+To set up and immediately run the app:
+
+```powershell
+.\setup.ps1 -RunApp
+```
+
+Important:
+- They still need Python installed.
+- They still need MySQL installed locally on their laptop.
+- They must enter their own local MySQL password during setup.
+
 ## MySQL setup
 
 1. Create a `.env` file in the project root with:
