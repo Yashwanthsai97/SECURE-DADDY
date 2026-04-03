@@ -1,12 +1,10 @@
 import io
-import sys
 from datetime import datetime, timedelta, timezone
 
 import requests
 import whois
 from flask import Flask, jsonify, request, send_file, session
 from flask_cors import CORS
-from mysql.connector import Error as MySQLError
 from PyPDF2 import PdfReader, PdfWriter
 
 from config.db import init_db
@@ -162,13 +160,9 @@ def register_tool_routes(app):
         except Exception as error:
             return jsonify({"error": str(error)}), 500
 
+
+app = create_app()
+
+
 if __name__ == "__main__":
-    try:
-        app = create_app()
-        app.run(debug=True)
-    except MySQLError as error:
-        print("\n[SecureDaddy] MySQL startup error")
-        print("The app could not connect to MySQL with the current settings.")
-        print("Check D:\\SECURE-DADDY\\.env and confirm MYSQL_HOST, MYSQL_PORT, MYSQL_USER, MYSQL_PASSWORD, and MYSQL_DATABASE are correct.")
-        print(f"MySQL said: {error}")
-        sys.exit(1)
+    app.run(debug=True)
