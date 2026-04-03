@@ -1,9 +1,20 @@
+import platform
+import subprocess
+import time
 from pathlib import Path
 
 import mysql.connector
 from mysql.connector import pooling
 
-from config.settings import MYSQL_DATABASE, MYSQL_HOST, MYSQL_PASSWORD, MYSQL_PORT, MYSQL_USER
+from config.settings import (
+    MYSQL_AUTO_START_SERVICE,
+    MYSQL_DATABASE,
+    MYSQL_HOST,
+    MYSQL_PASSWORD,
+    MYSQL_PORT,
+    MYSQL_USER,
+    MYSQL_WINDOWS_SERVICE_NAME,
+)
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -12,7 +23,51 @@ SCHEMA_PATH = BASE_DIR / "schema.sql"
 _pool = None
 
 
+def _is_local_mysql():
+    return MYSQL_HOST in {"localhost", "127.0.0.1"}
+
+
+def _try_start_windows_mysql_service():
+    if not MYSQL_AUTO_START_SERVICE:
+        return
+
+    if platform.system() != "Windows":
+        return
+
+    if not _is_local_mysql():
+        return
+
+    service_name = MYSQL_WINDOWS_SERVICE_NAME.strip()
+    if not service_name:
+        return
+
+    try:
+        query_result = subprocess.run(
+            ["sc.exe", "query", service_name],
+            capture_output=True,
+            text=True,
+            check=False,
+            timeout=10,
+        )
+        output = (query_result.stdout or "") + (query_result.stderr or "")
+        if "RUNNING" in output:
+            return
+
+        subprocess.run(
+            ["sc.exe", "start", service_name],
+            capture_output=True,
+            text=True,
+            check=False,
+            timeout=15,
+        )
+        time.sleep(2)
+    except Exception:
+        # Best-effort startup only; connection code will still raise the real DB error if needed.
+        return
+
+
 def _bootstrap_connection():
+    _try_start_windows_mysql_service()
     return mysql.connector.connect(
         host=MYSQL_HOST,
         port=MYSQL_PORT,

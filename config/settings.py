@@ -13,3 +13,5 @@ MYSQL_PORT = int(os.getenv("MYSQL_PORT", "3306"))
 MYSQL_USER = os.getenv("MYSQL_USER", "root")
 MYSQL_PASSWORD = os.getenv("MYSQL_PASSWORD", "")
 MYSQL_DATABASE = os.getenv("MYSQL_DATABASE", "secure_daddy")
+MYSQL_AUTO_START_SERVICE = os.getenv("MYSQL_AUTO_START_SERVICE", "true").lower() == "true"
+MYSQL_WINDOWS_SERVICE_NAME = os.getenv("MYSQL_WINDOWS_SERVICE_NAME", "MySQL80")

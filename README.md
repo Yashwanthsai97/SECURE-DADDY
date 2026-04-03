@@ -26,6 +26,22 @@ MYSQL_DATABASE=secure_daddy
 
 The application will automatically create the `secure_daddy` database and the `users` table on startup.
 
+### Optional auto-start of local MySQL on Windows
+
+If MySQL is installed on a laptop as a Windows service, `app.py` can try to start it automatically before connecting.
+
+Add these to `.env`:
+
+```env
+MYSQL_AUTO_START_SERVICE=true
+MYSQL_WINDOWS_SERVICE_NAME=MySQL80
+```
+
+Notes:
+- This only works if MySQL is already installed on that laptop.
+- It is meant for local use on each friend's machine.
+- It does not install MySQL automatically; it only tries to start an existing Windows service.
+
 ## One-time migration from `users.json`
 
 If you want to import existing JSON users into MySQL first, run:
