@@ -194,10 +194,12 @@ nav a:hover::after{
     justify-content:flex-start;
     gap:0.9rem;
     min-width:240px;
+    max-width: 300px;
     padding:0.55rem 0.9rem;
     background:rgba(255,255,255,0.08);
     color:#f3f3f3;
     border:1px solid rgba(255,255,255,0.12);
+    text-align: center;   /* 🔥 This centers the text */
 }
 
 .profile-chip:hover{
