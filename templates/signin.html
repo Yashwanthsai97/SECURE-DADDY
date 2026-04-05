@@ -270,21 +270,25 @@
 
         .link-platform-grid {
             display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
             gap: 14px;
+            align-items: start;
         }
 
         .link-platform-btn {
-            position: relative;
             display: flex;
-            align-items: flex-start;
-            gap: 14px;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
             width: 100%;
-            padding: 16px 62px 16px 18px;
+            min-height: 148px;
+            padding: 18px 14px;
             border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 22px;
+            border-radius: 20px;
             background: rgba(255, 255, 255, 0.03);
             color: var(--text);
-            text-align: left;
+            text-align: center;
             cursor: pointer;
             transition: border-color 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
         }
@@ -298,50 +302,31 @@
         }
 
         .link-platform-btn::after {
-            content: "\25BE";
-            position: absolute;
-            top: 50%;
-            right: 18px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 34px;
-            height: 34px;
-            margin-top: -17px;
-            border-radius: 999px;
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--text);
-            font-size: 16px;
-            transition: transform 0.25s ease, background-color 0.25s ease;
+            display: none;
+            content: none;
         }
 
         .link-platform-btn.is-open,
         .link-platform-btn.is-active {
             border-color: rgba(255, 157, 0, 0.5);
-            border-radius: 22px 22px 0 0;
             background: rgba(255, 157, 0, 0.08);
             box-shadow: 0 16px 30px rgba(255, 157, 0, 0.12);
         }
 
-        .link-platform-btn.is-open::after,
-        .link-platform-btn.is-active::after {
-            transform: rotate(180deg);
-            background: rgba(255, 157, 0, 0.14);
-        }
-
         .link-platform-copy {
             display: grid;
-            gap: 8px;
-            flex: 1;
+            gap: 10px;
+            justify-items: center;
+            text-align: center;
             min-width: 0;
+            width: 100%;
         }
 
         .link-platform-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px;
-            flex-wrap: wrap;
+            display: grid;
+            gap: 8px;
+            justify-items: center;
+            width: 100%;
         }
 
         .link-platform-copy strong {
@@ -349,20 +334,28 @@
         }
 
         .link-platform-state {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 30px;
+            padding: 6px 12px;
+            border-radius: 999px;
             color: var(--muted);
-            font-size: 12px;
-            line-height: 1.4;
+            background: rgba(255, 255, 255, 0.05);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            line-height: 1;
+            text-transform: uppercase;
         }
 
         .link-platform-btn.has-value .link-platform-state {
             color: #ffd18a;
+            background: rgba(255, 157, 0, 0.12);
         }
 
         .link-platform-value {
-            color: var(--muted);
-            font-size: 13px;
-            line-height: 1.55;
-            overflow-wrap: anywhere;
+            display: none;
         }
 
         .link-platform-btn.has-value .link-platform-value {
@@ -371,13 +364,14 @@
 
         .link-editor-card {
             display: none;
+            grid-column: 1 / -1;
             gap: 14px;
-            margin-top: -10px;
-            padding: 18px;
-            border-radius: 0 0 22px 22px;
+            margin-top: 0;
+            padding: 20px;
+            border-radius: 22px;
             background: rgba(255, 157, 0, 0.07);
             border: 1px solid rgba(255, 157, 0, 0.22);
-            border-top: none;
+            box-shadow: 0 18px 34px rgba(0, 0, 0, 0.16);
         }
 
         .link-editor-card.is-visible {
@@ -1028,7 +1022,7 @@
 
             .profile-hero-metrics,
             .link-platform-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
             }
 
             .profile-section-card .field-group {
@@ -1209,7 +1203,7 @@
                                 <div class="section-title-row">
                                     <div>
                                         <h3>Public Links</h3>
-                                        <p class="helper">Click any platform card to add, update, or remove its saved link. Each card shows the current saved URL so everything is easier to scan in one place.</p>
+                                        <p class="helper">Choose any platform card below to open one shared editor. The cards stay compact and only show whether a link has been added or not.</p>
                                     </div>
                                     <span class="section-chip">Links</span>
                                 </div>
@@ -1237,7 +1231,7 @@
                                         <span class="link-platform-copy">
                                             <span class="link-platform-header">
                                                 <strong>Website</strong>
-                                                <span class="link-platform-state">{% if current_user.website %}Link added{% else %}Add link{% endif %}</span>
+                                                <span class="link-platform-state">{% if current_user.website %}Added{% else %}Not added{% endif %}</span>
                                             </span>
                                             <span class="link-platform-value" id="saved-website-text">{{ current_user.website or 'No website added yet' }}</span>
                                         </span>
@@ -1251,7 +1245,7 @@
                                         <span class="link-platform-copy">
                                             <span class="link-platform-header">
                                                 <strong>LinkedIn</strong>
-                                                <span class="link-platform-state">{% if current_user.linkedin_url %}Link added{% else %}Add link{% endif %}</span>
+                                                <span class="link-platform-state">{% if current_user.linkedin_url %}Added{% else %}Not added{% endif %}</span>
                                             </span>
                                             <span class="link-platform-value" id="saved-linkedin-text">{{ current_user.linkedin_url or 'No LinkedIn link added yet' }}</span>
                                         </span>
@@ -1265,7 +1259,7 @@
                                         <span class="link-platform-copy">
                                             <span class="link-platform-header">
                                                 <strong>Facebook</strong>
-                                                <span class="link-platform-state">{% if current_user.facebook_url %}Link added{% else %}Add link{% endif %}</span>
+                                                <span class="link-platform-state">{% if current_user.facebook_url %}Added{% else %}Not added{% endif %}</span>
                                             </span>
                                             <span class="link-platform-value" id="saved-facebook-text">{{ current_user.facebook_url or 'No Facebook link added yet' }}</span>
                                         </span>
@@ -1281,7 +1275,7 @@
                                         <span class="link-platform-copy">
                                             <span class="link-platform-header">
                                                 <strong>Instagram</strong>
-                                                <span class="link-platform-state">{% if current_user.instagram_url %}Link added{% else %}Add link{% endif %}</span>
+                                                <span class="link-platform-state">{% if current_user.instagram_url %}Added{% else %}Not added{% endif %}</span>
                                             </span>
                                             <span class="link-platform-value" id="saved-instagram-text">{{ current_user.instagram_url or 'No Instagram link added yet' }}</span>
                                         </span>
@@ -1295,7 +1289,7 @@
                                         <span class="link-platform-copy">
                                             <span class="link-platform-header">
                                                 <strong>X / Twitter</strong>
-                                                <span class="link-platform-state">{% if current_user.x_url %}Link added{% else %}Add link{% endif %}</span>
+                                                <span class="link-platform-state">{% if current_user.x_url %}Added{% else %}Not added{% endif %}</span>
                                             </span>
                                             <span class="link-platform-value" id="saved-x-text">{{ current_user.x_url or 'No X link added yet' }}</span>
                                         </span>
@@ -1309,7 +1303,7 @@
                                         <span class="link-platform-copy">
                                             <span class="link-platform-header">
                                                 <strong>YouTube</strong>
-                                                <span class="link-platform-state">{% if current_user.youtube_url %}Link added{% else %}Add link{% endif %}</span>
+                                                <span class="link-platform-state">{% if current_user.youtube_url %}Added{% else %}Not added{% endif %}</span>
                                             </span>
                                             <span class="link-platform-value" id="saved-youtube-text">{{ current_user.youtube_url or 'No YouTube link added yet' }}</span>
                                         </span>
@@ -1323,7 +1317,7 @@
                                         <span class="link-platform-copy">
                                             <span class="link-platform-header">
                                                 <strong>TikTok</strong>
-                                                <span class="link-platform-state">{% if current_user.tiktok_url %}Link added{% else %}Add link{% endif %}</span>
+                                                <span class="link-platform-state">{% if current_user.tiktok_url %}Added{% else %}Not added{% endif %}</span>
                                             </span>
                                             <span class="link-platform-value" id="saved-tiktok-text">{{ current_user.tiktok_url or 'No TikTok link added yet' }}</span>
                                         </span>
@@ -1342,7 +1336,7 @@
                                     <div class="field-group">
                                         <label for="link-editor-input">Selected platform link</label>
                                         <input id="link-editor-input" type="url" placeholder="https://your-site.com">
-                                        <p class="helper">Click a platform card to open this editor, add or remove its full public URL, then save the profile when you are done.</p>
+                                        <p class="helper">Pick a card above to open this shared link editor, then add or remove the full public URL and save your profile when you are done.</p>
                                     </div>
 
                                     <div class="actions">
@@ -1771,7 +1765,7 @@
                 button.classList.toggle("is-open", isOpen);
 
                 if (state) {
-                    state.textContent = hasValue ? "Link added" : "Add link";
+                    state.textContent = hasValue ? "Added" : "Not added";
                 }
             });
         }
@@ -1805,12 +1799,12 @@
             }
 
             if (editorStatus) {
-                editorStatus.textContent = currentValue ? "Link added" : "No link yet";
+                editorStatus.textContent = currentValue ? "Added" : "Not added";
                 editorStatus.classList.toggle("is-filled", Boolean(currentValue));
             }
 
             if (applyButton) {
-                applyButton.textContent = currentValue ? "Update Link" : "Apply Link";
+                applyButton.textContent = currentValue ? "Update Link" : "Add Link";
             }
 
             if (clearButton) {
@@ -1941,6 +1935,21 @@
         const clearLinkButton = document.getElementById("clear-link-button");
 
         if (linkPlatformButtons.length && linkEditorInput && linkEditorCard) {
+            function getLinkButton(fieldId) {
+                return linkPlatformButtons.find(button => button.dataset.linkTarget === fieldId) || null;
+            }
+
+            function positionEditorBelowRow(targetButton) {
+                if (!targetButton) {
+                    return;
+                }
+
+                const targetTop = targetButton.offsetTop;
+                const rowButtons = linkPlatformButtons.filter(button => Math.abs(button.offsetTop - targetTop) < 4);
+                const lastButtonInRow = rowButtons[rowButtons.length - 1] || targetButton;
+                lastButtonInRow.insertAdjacentElement("afterend", linkEditorCard);
+            }
+
             linkPlatformButtons.forEach(button => {
                 button.addEventListener("click", () => {
                     const fieldId = button.dataset.linkTarget || LINK_PLATFORM_CONFIG[0].fieldId;
@@ -1954,7 +1963,7 @@
                     }
 
                     activeLinkFieldId = fieldId;
-                    button.insertAdjacentElement("afterend", linkEditorCard);
+                    positionEditorBelowRow(button);
                     linkEditorCard.classList.add("is-visible");
                     refreshLinkPlatformButtons();
                     updateLinkEditor();
@@ -1988,6 +1997,14 @@
                     commitActiveLinkValue(linkEditorInput.value);
                     setStatus(getLinkPlatformConfig(activeLinkFieldId).label + " link updated. Save changes to keep it.", "success");
                 }
+            });
+
+            window.addEventListener("resize", () => {
+                if (!linkEditorCard.classList.contains("is-visible") || !activeLinkFieldId) {
+                    return;
+                }
+
+                positionEditorBelowRow(getLinkButton(activeLinkFieldId));
             });
 
             refreshLinkPlatformButtons();
